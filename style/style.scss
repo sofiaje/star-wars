@@ -1,5 +1,6 @@
 @import "partials/variables";
 @import "partials/text";
+@import "partials/btn";
 
 
 * {
@@ -16,4 +17,14 @@ body {
 #pagewrapper {
     margin: 1rem;
     text-align: center;
+}
+
+#charactersDiv {
+    display: flex;
+    justify-content: space-around;
+}
+.character {
+    padding: 1rem;
+    border: 1px solid;
+    height: 100px;
 }

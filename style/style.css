@@ -7,6 +7,10 @@ h1, h2, h3, h4, h5 {
   color: rgb(199, 179, 0);
 }
 
+button {
+  cursor: pointer;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -21,4 +25,15 @@ body {
 #pagewrapper {
   margin: 1rem;
   text-align: center;
+}
+
+#charactersDiv {
+  display: flex;
+  justify-content: space-around;
+}
+
+.character {
+  padding: 1rem;
+  border: 1px solid;
+  height: 100px;
 }/*# sourceMappingURL=style.css.map */
