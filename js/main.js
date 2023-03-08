@@ -8,7 +8,7 @@ const list2 = document.getElementById("list2");
 
 //class character
 class Character {
-    constructor(name, height, mass, hairColor, skinColor, eyeColor, gender, films) {
+    constructor(name, height, mass, hairColor, skinColor, eyeColor, gender, films, img) {
         this.name = name;
         this.height = height;
         this.mass = mass;
@@ -17,7 +17,7 @@ class Character {
         this.eye_color = eyeColor;
         this.gender = gender;
         this.films = films;
-        // this.img = img;
+        this.img = img;
     }
 }
 
@@ -38,7 +38,7 @@ async function createInstance(value) {
 
     let { name, height, mass, hair_color, skin_color, eye_color, gender, films } = person
 
-    let newPerson = new Character(name, height, mass, hair_color, skin_color, eye_color, gender, films)
+    let newPerson = new Character(name, height, mass, hair_color, skin_color, eye_color, gender, films, value)
     // console.log(newPerson)
     return newPerson
 }
@@ -55,8 +55,9 @@ getDataBtn.addEventListener("click", async function (e) {
     if (parseInt(list1.value) !== 0 && parseInt(list2.value) !== 0) {
         let firstCharacter = await createInstance(list1.value);
         let secondCharacter = await createInstance(list2.value);
-    
+
         charactersDiv.innerHTML = "";
+        console.log(firstCharacter)
         displayData(firstCharacter);
         displayData(secondCharacter);
     } else {
@@ -68,16 +69,9 @@ getDataBtn.addEventListener("click", async function (e) {
 
 function displayData(character) {
     // console.log(character)
-    let { name, height, mass, hair_color, skin_color, eye_color, gender, films } = character
+    let { name, height, mass, hair_color, skin_color, eye_color, gender, films, img } = character
 
     let section = document.createElement("section")
-    section.innerHTML = `<h2>${name}</h2>
-    <p>Height: ${height}<br>
-    Mass: ${mass}<br>
-    Hair: ${hair_color}<br>
-    Skin color: ${skin_color}<br>
-    Eye color: ${eye_color}<br>
-    Gender: ${gender}<br>
-    Films: ${films.length}<br></p>`
+    section.innerHTML = `<img src="images/${img}.webp" class="small img" alt=""><h2>${name}</h2>`
     charactersDiv.append(section);
 }
