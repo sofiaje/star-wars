@@ -1,0 +1,24 @@
+/* @media ($md) {
+
+    }
+*/
+h1, h2, h3, h4, h5 {
+  font-family: "Oswald", sans-serif;
+  color: rgb(199, 179, 0);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(255, 255, 255);
+  color: black;
+}
+
+#pagewrapper {
+  margin: 1rem;
+  text-align: center;
+}/*# sourceMappingURL=style.css.map */
