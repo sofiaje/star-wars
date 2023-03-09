@@ -57,7 +57,7 @@ getDataBtn.addEventListener("click", async function (e) {
         let secondCharacter = await createInstance(list2.value);
 
         charactersDiv.innerHTML = "";
-        console.log(firstCharacter)
+        // console.log(firstCharacter)
         displayData(firstCharacter);
         displayData(secondCharacter);
     } else {
@@ -75,3 +75,11 @@ function displayData(character) {
     section.innerHTML = `<img src="images/${img}.webp" class="small img" alt=""><h2>${name}</h2>`
     charactersDiv.append(section);
 }
+
+/* <p>Height: ${height}<br>
+mass: ${mass}<br>
+hair color: ${hair_color}<br>
+skin color: ${skin_color}<br>
+eye color: ${eye_color}<br>
+gender: ${gender}<br>
+</p> */
