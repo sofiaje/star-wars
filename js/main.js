@@ -25,22 +25,25 @@ class Character {
     compareHeight(character) {
         let p = document.createElement("p");
         if (this.height > character.height) {
-            p.innerHTML += `${this.name} is taller than ${character.name}`;
+            p.innerHTML = `${this.name} is taller than ${character.name}`;
         } else if (this.height < character.height) {
-            p.innerHTML += `${character.name} is taller than ${this.name}`;
+            p.innerHTML = `${character.name} is taller than ${this.name}`;
         } else {
-            p.innerHTML += `They have the same height`;
+            p.innerHTML = `They have the same height`;
         }
         compareDiv.append(p);
     }
     compareMass(character) {
+        console.log(this.mass, character.mass)
         let p = document.createElement("p");
-        if (this.mass > character.mass) {
-            p.innerHTML += `${this.name} is heavier than ${character.name}`;
+        if (!Number(this.mass) || !Number(character.mass)) {
+            p.innerHTML = "Someone is keeping their weight a secret!"
+        } else if (this.mass > character.mass) {
+            p.innerHTML = `${this.name} is heavier than ${character.name}`;
         } else if (this.mass < character.mass) {
-            p.innerHTML += `${character.name} is heavier than ${this.name}`;
+            p.innerHTML = `${character.name} is heavier than ${this.name}`;
         } else {
-            p.innerHTML += `They have the same weight`;
+            p.innerHTML = `They have the same weight`;
         }
         compareDiv.append(p);
 
@@ -48,29 +51,28 @@ class Character {
     compareFilms(character) {
         let p = document.createElement("p");
         if (this.films.length > character.films.length) {
-            p.innerHTML += `${this.name} stars in more films then ${character.name}`;
+            p.innerHTML = `${this.name} stars in more films then ${character.name}`;
         } else if (this.films.length < character.films.length) {
-            p.innerHTML += `${character.name} stars in more films then ${this.name}`;
+            p.innerHTML = `${character.name} stars in more films then ${this.name}`;
         } else {
-            p.innerHTML += `They star in the same amount of films`;
+            p.innerHTML = `They star in the same amount of films`;
         }
         compareDiv.append(p);
     }
     compareGender(character) {
         let p = document.createElement("p");
 
-        this.gender === character.gender ? p.innerHTML += `Same gender` : ""
+        this.gender === character.gender ? p.innerHTML = `Same gender` : ""
 
         compareDiv.append(p);
-
     }
-    compareHairandSkin(character) {
+    compareHairAndSkin(character) {
         let p = document.createElement("p");
         if (this.hair_color === character.hair_color) {
-            p.innerHTML += `Same haircolor`
+            p.innerHTML = `Same haircolor`
         }
         if (this.skin_color === character.skin_color) {
-            p.innerHTML += `Same skincolor`
+            p.innerHTML = `Same skincolor`
         }
         compareDiv.append(p);
     }
@@ -88,27 +90,22 @@ async function getData(url) {
 
 
 
-
+//create new instance depening on user choice
 async function createInstance(value) {
     let person = await getData(`people/${value}`);
 
     let { name, height, mass, hair_color, skin_color, eye_color, gender, films } = person
 
     let newPerson = new Character(name, height, mass, hair_color, skin_color, eye_color, gender, films, value)
-    // console.log(newPerson)
     return newPerson
 }
 
-// loadPage()
 
-
-
-
-
+//get info button
 getDataBtn.addEventListener("click", async function (e) {
     e.preventDefault();
 
-    if (parseInt(list1.value) !== 0 && parseInt(list2.value) !== 0) {
+    if (Number(list1.value) !== 0 && Number(list2.value) !== 0) {
         p.innerText = "";
         compareDiv.innerText = "";
         let firstCharacter = await createInstance(list1.value);
@@ -130,32 +127,30 @@ getDataBtn.addEventListener("click", async function (e) {
             firstCharacter.compareMass(secondCharacter);
             firstCharacter.compareFilms(secondCharacter);
             firstCharacter.compareGender(secondCharacter);
-            firstCharacter.compareHairandSkin(secondCharacter);
+            firstCharacter.compareHairAndSkin(secondCharacter);
 
             addData(firstCharacter, sectionOne)
             addData(secondCharacter, sectionTwo)
         })
     } else {
-        p.innerText = "Du måste välja två karaktärer"
+        p.innerText = "Choose two characters"
     }
 })
 
 
-
+//displays data in browser
 function displayData(character) {
-    // console.log(character)
-    let { name, height, mass, hair_color, skin_color, eye_color, gender, films, img } = character
+    let { name, img } = character
 
     let section = document.createElement("section")
     section.innerHTML = `<img src="images/${img}.png" class="small img" alt=""><h2>${name}</h2>`
-    let btn
     charactersDiv.append(section);
     return section;
 }
 
 
+//add additional data
 function addData(character, section) {
-
     let { name, height, mass, hair_color, skin_color, eye_color, gender, films, img } = character
 
     section.innerHTML = `<img src="images/${img}.png" class="small img" alt=""><h2>${name}</h2><p>
@@ -168,13 +163,4 @@ function addData(character, section) {
     Films: ${films.length}<br>
     </p>`;
 
-    // console.log(height, hair_color, mass, films.length)
 }
-
-/* <p>Height: ${height}<br>
-mass: ${mass}<br>
-hair color: ${hair_color}<br>
-skin color: ${skin_color}<br>
-eye color: ${eye_color}<br>
-gender: ${gender}<br>
-</p> */
