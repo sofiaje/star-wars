@@ -123,6 +123,7 @@ getDataBtn.addEventListener("click", async function (e) {
 
         compareBtn.addEventListener("click", () => {
             compareDiv.innerHTML = ""
+            compareBtn.disabled = true;
             if (firstCharacter.name === secondCharacter.name) {
                 let p = document.createElement("p");
                 p.innerHTML = `Same person or evil twin? Who knows?`

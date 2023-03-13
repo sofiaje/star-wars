@@ -37,6 +37,10 @@ button {
 .compareBtn:hover {
   background-color: #8c7621;
 }
+.compareBtn:disabled {
+  background-color: rgb(82, 82, 82);
+  cursor: auto;
+}
 
 * {
   margin: 0;
@@ -57,25 +61,31 @@ body {
 }
 
 #charactersDiv {
+  margin-top: 3rem;
   display: flex;
+  flex-direction: column;
+  gap: 3rem;
   justify-content: space-between;
+  margin-bottom: 3rem;
+}
+@media (width >= 576px) {
+  #charactersDiv {
+    flex-direction: row;
+    gap: 0rem;
+  }
 }
 
 #compareDiv {
   margin: 2rem;
+  overflow: hidden;
 }
 
 .image {
   max-width: 600px;
-  margin: 1rem;
   width: 100%;
+  padding: 1rem;
 }
 
 .small.img {
-  max-height: 150px;
-}
-@media (width >= 576px) {
-  .small.img {
-    max-height: 300px;
-  }
+  max-height: 300px;
 }/*# sourceMappingURL=style.css.map */

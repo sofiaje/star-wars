@@ -17,34 +17,38 @@ body {
 #pagewrapper {
     text-align: center;
     max-width: 1200px;
-    overflow: hidden;
+    overflow:hidden;
     // border: 1px solid;
     margin: 0 auto;
 }
 
 #charactersDiv {
+    margin-top: 3rem;
     display: flex;
+    flex-direction: column;
+    gap: 3rem;
     justify-content: space-between;
-}
+    margin-bottom: 3rem;
+    @media ($sm) {
+    flex-direction: row;
+    gap: 0rem;
 
-section {
+
+    }
 }
 
 #compareDiv {
     margin: 2rem;
-    // overflow: hidden;
+    overflow: hidden;
     // border: 1px solid;
     // border-radius: 1rem;
 }
 
 .image {
     max-width: 600px;
-    margin: 1rem;
     width: 100%;
+    padding: 1rem;
 }
 .small.img{
-    max-height: 150px;
-    @media ($sm) {
-        max-height: 300px;
-    }
+    max-height: 300px;
 }
