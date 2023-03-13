@@ -34,7 +34,6 @@ class Character {
         compareDiv.append(p);
     }
     compareMass(character) {
-        console.log(this.mass, character.mass)
         let p = document.createElement("p");
         if (!Number(this.mass) || !Number(character.mass)) {
             p.innerHTML = "Someone is keeping their weight a secret!"
@@ -46,7 +45,6 @@ class Character {
             p.innerHTML = `They have the same weight`;
         }
         compareDiv.append(p);
-
     }
     compareFilms(character) {
         let p = document.createElement("p");
@@ -62,18 +60,21 @@ class Character {
     compareGender(character) {
         let p = document.createElement("p");
 
-        this.gender === character.gender ? p.innerHTML = `Same gender` : ""
+        this.gender === character.gender ? p.innerHTML = `Same gender` : "";
 
         compareDiv.append(p);
     }
     compareHairAndSkin(character) {
         let p = document.createElement("p");
-        if (this.hair_color === character.hair_color) {
+        if (this.hair_color === "no hair on this body" && character.hair_color === "no hair on this body") {
+            console.log("robots don't do hair")
+        } else if (this.hair_color === character.hair_color) {
             p.innerHTML = `Same haircolor`
+        } else if (this.hair_color.includes(character.hair_color) || character.hair_color.includes(this.hair_color)) {
+            p.innerHTML = `(Some hairs are the same color)`
         }
-        if (this.skin_color === character.skin_color) {
-            p.innerHTML = `Same skincolor`
-        }
+
+        this.skin_color === character.skin_color ? p.innerHTML = `Same skincolor` : "";
         compareDiv.append(p);
     }
 }
@@ -84,7 +85,6 @@ async function getData(url) {
     let res = await fetch(`https://swapi.dev/api/${url}`);
     let data = await res.json();
 
-    console.log(data)
     return data
 }
 
@@ -123,11 +123,17 @@ getDataBtn.addEventListener("click", async function (e) {
 
         compareBtn.addEventListener("click", () => {
             compareDiv.innerHTML = ""
-            firstCharacter.compareHeight(secondCharacter);
-            firstCharacter.compareMass(secondCharacter);
-            firstCharacter.compareFilms(secondCharacter);
-            firstCharacter.compareGender(secondCharacter);
-            firstCharacter.compareHairAndSkin(secondCharacter);
+            if (firstCharacter.name === secondCharacter.name) {
+                let p = document.createElement("p");
+                p.innerHTML = `Same person or evil twin? Who knows?`
+                compareDiv.append(p);
+            } else {
+                firstCharacter.compareHeight(secondCharacter);
+                firstCharacter.compareMass(secondCharacter);
+                firstCharacter.compareFilms(secondCharacter);
+                firstCharacter.compareGender(secondCharacter);
+                firstCharacter.compareHairAndSkin(secondCharacter);
+            }
 
             addData(firstCharacter, sectionOne)
             addData(secondCharacter, sectionTwo)

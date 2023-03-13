@@ -8,6 +8,10 @@ h1, h2, h3, h4, h5 {
   padding-top: 0.5rem;
 }
 
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .error {
   font-style: italic;
   color: rgb(94, 94, 94) 0, 0, 0;
@@ -54,7 +58,7 @@ body {
 
 #charactersDiv {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 #compareDiv {
