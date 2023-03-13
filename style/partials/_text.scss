@@ -2,4 +2,12 @@ h1,h2,h3,h4,h5 {
     font-family: 'Oswald', sans-serif;
     color: $heading-color;
     padding-top: 0.5rem;
+
+}
+.error {
+    font-style: italic;
+    color: rgb(94, 94, 94)(0, 0, 0);
+}
+p {
+    line-height: 1.5rem;
 }

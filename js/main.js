@@ -1,6 +1,9 @@
 //global
 let charactersDiv = document.getElementById("charactersDiv");
+let compareDiv = document.getElementById("compareDiv");
 const getDataBtn = document.getElementById("getDataBtn")
+const p = document.querySelector("p.error");
+
 
 const list1 = document.getElementById("list1");
 const list2 = document.getElementById("list2");
@@ -10,14 +13,20 @@ const list2 = document.getElementById("list2");
 class Character {
     constructor(name, height, mass, hairColor, skinColor, eyeColor, gender, films, img) {
         this.name = name;
-        this.height = height;
-        this.mass = mass;
+        this.height = parseInt(height);
+        this.mass = parseInt(mass);
         this.hair_color = hairColor;
         this.skin_color = skinColor;
         this.eye_color = eyeColor;
         this.gender = gender;
         this.films = films;
         this.img = img;
+    }
+    compareCaracters(character, sectionOne, sectionTwo) {
+        compareDiv.innerText = "Du vill jämnföra " + this.name + " och " + character.name;
+        addData(this, sectionOne)
+        addData(character, sectionTwo)
+
     }
 }
 
@@ -53,20 +62,26 @@ getDataBtn.addEventListener("click", async function (e) {
     e.preventDefault();
 
     if (parseInt(list1.value) !== 0 && parseInt(list2.value) !== 0) {
+        p.innerText = "";
+        compareDiv.innerText = "";
         let firstCharacter = await createInstance(list1.value);
         let secondCharacter = await createInstance(list2.value);
 
         charactersDiv.innerHTML = "";
-        // console.log(firstCharacter)
-        displayData(firstCharacter);
-        let compareBtn = document.createElement("button");
-        compareBtn.innerText = "Compare characters";
-        compareBtn.classList.add("compareBtn")
+        let sectionOne = displayData(firstCharacter);
 
+        let compareBtn = document.createElement("button");
+        compareBtn.innerText = "compare";
+        compareBtn.classList.add("compareBtn")
         charactersDiv.append(compareBtn)
-        displayData(secondCharacter);
+
+        let sectionTwo = displayData(secondCharacter);
+
+        compareBtn.addEventListener("click", () => {
+            firstCharacter.compareCaracters(secondCharacter, sectionOne, sectionTwo);
+        })
     } else {
-        console.log("du måste välja karaktärer")
+        p.innerText = "Du måste välja två karaktärer"
     }
 })
 
@@ -77,8 +92,26 @@ function displayData(character) {
     let { name, height, mass, hair_color, skin_color, eye_color, gender, films, img } = character
 
     let section = document.createElement("section")
-    section.innerHTML = `<img src="images/${img}.webp" class="small img" alt=""><h2>${name}</h2>`
+    section.innerHTML = `<img src="images/${img}.png" class="small img" alt=""><h2>${name}</h2>`
     charactersDiv.append(section);
+    return section;
+}
+
+function addData(character, section) {
+
+    let { name, height, mass, hair_color, skin_color, eye_color, gender, films, img } = character
+
+    section.innerHTML = `<img src="images/${img}.png" class="small img" alt=""><h2>${name}</h2><p>
+    Height: ${height}<br>
+    Mass: ${mass}<br>
+    Hair color: ${hair_color}<br>
+    Skin color: ${skin_color}<br>
+    Eye color: ${eye_color}<br>
+    Gender: ${gender}<br>
+    Films: ${films.length}<br>
+    </p>`;
+
+    // console.log(height, hair_color, mass, films.length)
 }
 
 /* <p>Height: ${height}<br>
