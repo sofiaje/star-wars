@@ -3,6 +3,9 @@ let charactersDiv = document.getElementById("charactersDiv");
 let compareDiv = document.getElementById("compareDiv");
 const getDataBtn = document.getElementById("getDataBtn")
 const p = document.querySelector("p.error");
+let buttonWrapper = document.createElement("div");
+buttonWrapper.classList.add("buttonWrapper")
+
 
 
 const list1 = document.getElementById("list1");
@@ -11,7 +14,7 @@ const list2 = document.getElementById("list2");
 
 //class character
 class Character {
-    constructor(name, height, mass, hairColor, skinColor, eyeColor, gender, films, img) {
+    constructor(name, height, mass, hairColor, skinColor, eyeColor, gender, films, img, homeworld) {
         this.name = name;
         this.height = Number(height) ? Number(height) : "unknown";
         this.mass = Number(mass) ? Number(mass) : "unknown";
@@ -21,7 +24,10 @@ class Character {
         this.gender = gender === "n/a" ? "no gender" : gender;
         this.films = films;
         this.img = img;
+        this.homeworld = homeworld
     }
+
+
     compareHeight(character) {
         let p = document.createElement("p");
         if (this.height > character.height) {
@@ -33,6 +39,8 @@ class Character {
         }
         compareDiv.append(p);
     }
+
+
     compareMass(character) {
         let p = document.createElement("p");
         if (!Number(this.mass) || !Number(character.mass)) {
@@ -46,6 +54,8 @@ class Character {
         }
         compareDiv.append(p);
     }
+
+
     compareFilms(character) {
         let p = document.createElement("p");
         if (this.films.length > character.films.length) {
@@ -57,6 +67,8 @@ class Character {
         }
         compareDiv.append(p);
     }
+
+
     compareGender(character) {
         let p = document.createElement("p");
 
@@ -64,25 +76,45 @@ class Character {
 
         compareDiv.append(p);
     }
+
+
     compareHairAndSkin(character) {
         let p = document.createElement("p");
         if (this.hair_color === "no hair on this body" && character.hair_color === "no hair on this body") {
             console.log("robots don't do hair")
         } else if (this.hair_color === character.hair_color) {
-            p.innerHTML = `Same haircolor`
+            p.innerHTML = `Same haircolor. `
         } else if (this.hair_color.includes(character.hair_color) || character.hair_color.includes(this.hair_color)) {
-            p.innerHTML = `(Some hairs are the same color)`
+            p.innerHTML = `(Some hairs are the same color). `
         }
 
-        this.skin_color === character.skin_color ? p.innerHTML = `Same skincolor` : "";
+        this.skin_color === character.skin_color ? p.innerHTML += `Same skincolor` : "";
         compareDiv.append(p);
+    }
+    async firstFilm() {
+        let data = await getData(this.films[0])
+        compareDiv.innerHTML = `${this.name} first appered in the movie <i>${data.title}</i>, released ${data.release_date}`
+    }
+    async movies(character) {
+
+    }
+    async planets(character) {
+        let data1 = await getData(this.homeworld);
+        let data2 = await getData(character.homeworld);
+        // console.log(data1.name + " and " + data2.name);
+        if (data1.name === data2.name) {
+            compareDiv.innerHTML = `${this.name} and ${character.name} share the same home world, the name is ${data1.name}`;
+        } else {
+            compareDiv.innerHTML = `The name of ${this.name}'s home world is ${data1.name}. `
+            compareDiv.innerHTML += `The name of ${character.name}'s home world is ${data2.name}.`
+        }
     }
 }
 
 
 //get data
 async function getData(url) {
-    let res = await fetch(`https://swapi.dev/api/${url}`);
+    let res = await fetch(`${url}`);
     let data = await res.json();
 
     return data
@@ -92,11 +124,11 @@ async function getData(url) {
 
 //create new instance depening on user choice
 async function createInstance(value) {
-    let person = await getData(`people/${value}`);
+    let person = await getData(`https://swapi.dev/api/people/${value}`);
 
-    let { name, height, mass, hair_color, skin_color, eye_color, gender, films } = person
+    let { name, height, mass, hair_color, skin_color, eye_color, gender, films, homeworld } = person
 
-    let newPerson = new Character(name, height, mass, hair_color, skin_color, eye_color, gender, films, value)
+    let newPerson = new Character(name, height, mass, hair_color, skin_color, eye_color, gender, films, value, homeworld)
     return newPerson
 }
 
@@ -114,16 +146,20 @@ getDataBtn.addEventListener("click", async function (e) {
         charactersDiv.innerHTML = "";
         let sectionOne = displayData(firstCharacter);
 
-        let compareBtn = document.createElement("button");
-        compareBtn.innerText = "compare";
-        compareBtn.classList.add("compareBtn")
-        charactersDiv.append(compareBtn)
 
-        let sectionTwo = displayData(secondCharacter);
+        let sectionTwo = document.createElement("section");
+        let compareBtn = document.createElement("button");
+        compareBtn.innerText = "compare characters";
+        compareBtn.classList.add("btn", "compareBtn")
+        charactersDiv.append(sectionTwo)
+        sectionTwo.append(compareBtn)
+
+        let sectionThree = displayData(secondCharacter);
 
         compareBtn.addEventListener("click", () => {
             compareDiv.innerHTML = ""
-            compareBtn.disabled = true;
+            buttonWrapper.innerHTML = ""
+            // compareBtn.disabled = true;
             if (firstCharacter.name === secondCharacter.name) {
                 let p = document.createElement("p");
                 p.innerHTML = `Same person or evil twin? Who knows?`
@@ -136,8 +172,25 @@ getDataBtn.addEventListener("click", async function (e) {
                 firstCharacter.compareHairAndSkin(secondCharacter);
             }
 
+
+            sectionTwo.append(buttonWrapper);
+            let commonFilmsBtn = document.createElement("button")
+            commonFilmsBtn.innerText = "Common films";
+            commonFilmsBtn.classList.add("btn", "smallBtn")
+
+            let planetBtn = document.createElement("button")
+            planetBtn.innerText = "Planet";
+            planetBtn.classList.add("btn", "smallBtn")
+
+            buttonWrapper.append(commonFilmsBtn, planetBtn)
+
             addData(firstCharacter, sectionOne)
-            addData(secondCharacter, sectionTwo)
+            addData(secondCharacter, sectionThree)
+
+            planetBtn.addEventListener("click", () => {
+                firstCharacter.planets(secondCharacter)
+            })
+
         })
     } else {
         p.innerText = "Choose two characters"
@@ -169,5 +222,23 @@ function addData(character, section) {
     Gender: ${gender}<br>
     Films: ${films.length}<br>
     </p>`;
+
+    let filmBtn = document.createElement("button")
+    filmBtn.innerText = "First apperence";
+    filmBtn.classList.add("btn", "smallBtn")
+
+    let commonFilmsBtn = document.createElement("button")
+    commonFilmsBtn.innerText = "Common films";
+    commonFilmsBtn.classList.add("btn", "smallBtn")
+
+    let vehiclesBtn = document.createElement("button")
+    vehiclesBtn.innerText = "Vechicles";
+    vehiclesBtn.classList.add("btn", "smallBtn")
+
+    section.append(filmBtn, vehiclesBtn)
+
+    filmBtn.addEventListener("click", () => {
+        character.firstFilm()
+    })
 
 }
