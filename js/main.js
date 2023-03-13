@@ -13,20 +13,66 @@ const list2 = document.getElementById("list2");
 class Character {
     constructor(name, height, mass, hairColor, skinColor, eyeColor, gender, films, img) {
         this.name = name;
-        this.height = parseInt(height);
-        this.mass = parseInt(mass);
-        this.hair_color = hairColor;
+        this.height = Number(height) ? Number(height) : "unknown";
+        this.mass = Number(mass) ? Number(mass) : "unknown";
+        this.hair_color = hairColor === "n/a" ? "no hair on this body" : hairColor;
         this.skin_color = skinColor;
         this.eye_color = eyeColor;
-        this.gender = gender;
+        this.gender = gender === "n/a" ? "no gender" : gender;
         this.films = films;
         this.img = img;
     }
-    compareCaracters(character, sectionOne, sectionTwo) {
-        compareDiv.innerText = "Du vill jämnföra " + this.name + " och " + character.name;
-        addData(this, sectionOne)
-        addData(character, sectionTwo)
+    compareHeight(character) {
+        let p = document.createElement("p");
+        if (this.height > character.height) {
+            p.innerHTML += `${this.name} is taller than ${character.name}`;
+        } else if (this.height < character.height) {
+            p.innerHTML += `${character.name} is taller than ${this.name}`;
+        } else {
+            p.innerHTML += `They have the same height`;
+        }
+        compareDiv.append(p);
+    }
+    compareMass(character) {
+        let p = document.createElement("p");
+        if (this.mass > character.mass) {
+            p.innerHTML += `${this.name} is heavier than ${character.name}`;
+        } else if (this.mass < character.mass) {
+            p.innerHTML += `${character.name} is heavier than ${this.name}`;
+        } else {
+            p.innerHTML += `They have the same weight`;
+        }
+        compareDiv.append(p);
 
+    }
+    compareFilms(character) {
+        let p = document.createElement("p");
+        if (this.films.length > character.films.length) {
+            p.innerHTML += `${this.name} stars in more films then ${character.name}`;
+        } else if (this.films.length < character.films.length) {
+            p.innerHTML += `${character.name} stars in more films then ${this.name}`;
+        } else {
+            p.innerHTML += `They star in the same amount of films`;
+        }
+        compareDiv.append(p);
+    }
+    compareGender(character) {
+        let p = document.createElement("p");
+
+        this.gender === character.gender ? p.innerHTML += `Same gender` : ""
+
+        compareDiv.append(p);
+
+    }
+    compareHairandSkin(character) {
+        let p = document.createElement("p");
+        if (this.hair_color === character.hair_color) {
+            p.innerHTML += `Same haircolor`
+        }
+        if (this.skin_color === character.skin_color) {
+            p.innerHTML += `Same skincolor`
+        }
+        compareDiv.append(p);
     }
 }
 
@@ -36,6 +82,7 @@ async function getData(url) {
     let res = await fetch(`https://swapi.dev/api/${url}`);
     let data = await res.json();
 
+    console.log(data)
     return data
 }
 
@@ -78,7 +125,15 @@ getDataBtn.addEventListener("click", async function (e) {
         let sectionTwo = displayData(secondCharacter);
 
         compareBtn.addEventListener("click", () => {
-            firstCharacter.compareCaracters(secondCharacter, sectionOne, sectionTwo);
+            compareDiv.innerHTML = ""
+            firstCharacter.compareHeight(secondCharacter);
+            firstCharacter.compareMass(secondCharacter);
+            firstCharacter.compareFilms(secondCharacter);
+            firstCharacter.compareGender(secondCharacter);
+            firstCharacter.compareHairandSkin(secondCharacter);
+
+            addData(firstCharacter, sectionOne)
+            addData(secondCharacter, sectionTwo)
         })
     } else {
         p.innerText = "Du måste välja två karaktärer"
@@ -93,9 +148,11 @@ function displayData(character) {
 
     let section = document.createElement("section")
     section.innerHTML = `<img src="images/${img}.png" class="small img" alt=""><h2>${name}</h2>`
+    let btn
     charactersDiv.append(section);
     return section;
 }
+
 
 function addData(character, section) {
 

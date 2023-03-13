@@ -57,10 +57,6 @@ body {
   justify-content: space-around;
 }
 
-section {
-  text-align: center;
-}
-
 #compareDiv {
   margin: 2rem;
 }
