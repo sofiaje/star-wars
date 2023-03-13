@@ -59,6 +59,11 @@ getDataBtn.addEventListener("click", async function (e) {
         charactersDiv.innerHTML = "";
         // console.log(firstCharacter)
         displayData(firstCharacter);
+        let compareBtn = document.createElement("button");
+        compareBtn.innerText = "Compare characters";
+        compareBtn.classList.add("compareBtn")
+
+        charactersDiv.append(compareBtn)
         displayData(secondCharacter);
     } else {
         console.log("du måste välja karaktärer")

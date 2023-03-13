@@ -12,6 +12,19 @@ button {
   cursor: pointer;
 }
 
+.compareBtn {
+  background-color: #baa13d;
+  color: white;
+  padding: 0.5rem 1rem;
+  align-self: center;
+  border-radius: 1rem;
+  border: 0;
+  transition: background-color 0.5s ease;
+}
+.compareBtn:hover {
+  background-color: #8c7621;
+}
+
 * {
   margin: 0;
   padding: 0;

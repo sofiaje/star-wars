@@ -1,3 +1,15 @@
 button {
     cursor: pointer;
 }
+.compareBtn {
+    background-color: #baa13d;
+    color: $p-white;
+    padding: 0.5rem 1rem;
+    align-self: center;
+    border-radius: 1rem;
+    border: 0;
+    transition: background-color 0.5s ease;
+    &:hover {
+        background-color: #8c7621;
+    }
+}
