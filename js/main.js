@@ -2,11 +2,9 @@
 let charactersDiv = document.getElementById("charactersDiv");
 let compareDiv = document.getElementById("compareDiv");
 const getDataBtn = document.getElementById("getDataBtn")
-const p = document.querySelector("p.error");
+const pError = document.querySelector("p.error");
 let buttonWrapper = document.createElement("div");
 buttonWrapper.classList.add("buttonWrapper")
-
-
 
 const list1 = document.getElementById("list1");
 const list2 = document.getElementById("list2");
@@ -30,13 +28,13 @@ class Character {
 
     compareHeight(character) {
         let p = document.createElement("p");
-        if (this.height > character.height) {
-            p.innerHTML = `${this.name} is taller than ${character.name}`;
-        } else if (this.height < character.height) {
-            p.innerHTML = `${character.name} is taller than ${this.name}`;
-        } else {
+
+        if (this.height === character.height) {
             p.innerHTML = `They have the same height`;
+        } else {
+            p.innerHTML = `${this.name} is ${this.height > character.height ? "taller" : "shorter"} than ${character.name}`;
         }
+
         compareDiv.append(p);
     }
 
@@ -45,12 +43,10 @@ class Character {
         let p = document.createElement("p");
         if (!Number(this.mass) || !Number(character.mass)) {
             p.innerHTML = "Someone is keeping their weight a secret!"
-        } else if (this.mass > character.mass) {
-            p.innerHTML = `${this.name} is heavier than ${character.name}`;
-        } else if (this.mass < character.mass) {
-            p.innerHTML = `${character.name} is heavier than ${this.name}`;
-        } else {
+        } else if(this.mass === character.mass) {
             p.innerHTML = `They have the same weight`;
+        } else {
+            p.innerHTML = `${this.name} is ${this.mass > character.mass ? "heavier" : "lighter"} than ${character.name}`;
         }
         compareDiv.append(p);
     }
@@ -58,13 +54,11 @@ class Character {
 
     compareFilms(character) {
         let p = document.createElement("p");
-        if (this.films.length > character.films.length) {
-            p.innerHTML = `${this.name} stars in more films then ${character.name}`;
-        } else if (this.films.length < character.films.length) {
-            p.innerHTML = `${character.name} stars in more films then ${this.name}`;
-        } else {
+        if (this.films.length === character.films.length) { 
             p.innerHTML = `They star in the same amount of films`;
-        }
+        } else {
+            p.innerHTML = `${this.name} stars in ${this.films.length > character.films.length ? "more" : "less"} movies than ${character.name}`;
+        } 
         compareDiv.append(p);
     }
 
@@ -81,7 +75,7 @@ class Character {
     compareHairAndSkin(character) {
         let p = document.createElement("p");
         if (this.hair_color === "no hair on this body" && character.hair_color === "no hair on this body") {
-            console.log("robots don't do hair")
+            console.log("Robots don't do hair")
         } else if (this.hair_color === character.hair_color) {
             p.innerHTML = `Same haircolor. `
         } else if (this.hair_color.includes(character.hair_color) || character.hair_color.includes(this.hair_color)) {
@@ -91,28 +85,45 @@ class Character {
         this.skin_color === character.skin_color ? p.innerHTML += `Same skincolor` : "";
         compareDiv.append(p);
     }
+    
     async firstFilm(character) {
-
+        loading();
         let data1 = await getData(this.films[0])
         let data2 = await getData(character.films[0])
         compareDiv.innerHTML = `${this.name} first appered in the movie <i>${data1.title}</i>, released ${data1.release_date}. `
-        if (data1.title === data2.title) {
+        if (data1.title === data2.title && this.name !== character.name) {
             compareDiv.innerHTML += `<br>${character.name} was first seen in the same movie.`
         }
     }
+
     async movies(character) {
+        loading();
 
     }
+
     async planets(character) {
+        loading();
         let data1 = await getData(this.homeworld);
         let data2 = await getData(character.homeworld);
         // console.log(data1.name + " and " + data2.name);
-        if (data1.name === data2.name) {
-            compareDiv.innerHTML = `${this.name} and ${character.name} share the same home world, the name is ${data1.name}`;
+        if (data1.name === data2.name && this.name !== character.name) {
+            compareDiv.innerHTML = `${this.name} and ${character.name} share the same home planet, the name of this planet is ${data1.name}`;
         } else {
             compareDiv.innerHTML = `The name of ${this.name}'s home world is ${data1.name}.`
         }
     }
+}
+
+
+
+
+
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+function loading() {
+    compareDiv.innerHTML = `<i class="fa-solid fa-spinner fa-spin fa-lg"></i>`;
 }
 
 
@@ -128,6 +139,7 @@ async function getData(url) {
 
 //create new instance depening on user choice
 async function createInstance(value) {
+    console.log("kör igång data hämtning")
     let person = await getData(`https://swapi.dev/api/people/${value}`);
 
     let { name, height, mass, hair_color, skin_color, eye_color, gender, films, homeworld } = person
@@ -141,12 +153,18 @@ async function createInstance(value) {
 //get info button
 getDataBtn.addEventListener("click", async function (e) {
     e.preventDefault();
+    compareDiv.classList.add("hidden")
+
+
 
     if (Number(list1.value) !== 0 && Number(list2.value) !== 0) {
-        p.innerText = "";
+        pError.innerHTML = `<i class="fa-solid fa-spinner fa-spin fa-2xl"></i>`
+
         compareDiv.innerText = "";
         let firstCharacter = await createInstance(list1.value);
         let secondCharacter = await createInstance(list2.value);
+
+        pError.innerHTML = ``
 
         charactersDiv.innerHTML = "";
         let sectionOne = displayData(firstCharacter);
@@ -154,6 +172,7 @@ getDataBtn.addEventListener("click", async function (e) {
 
         let sectionTwo = document.createElement("section");
         let compareBtn = document.createElement("button");
+        sectionTwo.classList.add("textSection")
         compareBtn.innerText = "compare characters";
         compareBtn.classList.add("btn", "compareBtn")
         charactersDiv.append(sectionTwo)
@@ -164,6 +183,8 @@ getDataBtn.addEventListener("click", async function (e) {
         compareBtn.addEventListener("click", () => {
             compareDiv.innerHTML = ""
             buttonWrapper.innerHTML = ""
+            compareDiv.classList.remove("hidden")
+
             // compareBtn.disabled = true;
             if (firstCharacter.name === secondCharacter.name) {
                 let p = document.createElement("p");
@@ -183,6 +204,11 @@ getDataBtn.addEventListener("click", async function (e) {
             commonFilmsBtn.innerText = "Common films";
             commonFilmsBtn.classList.add("btn", "smallBtn")
 
+            commonFilmsBtn.addEventListener("click", () => {
+                console.log("Här händer inget än, ingen info om gemensamma filmer")
+            })
+
+
 
             buttonWrapper.append(commonFilmsBtn)
 
@@ -192,7 +218,7 @@ getDataBtn.addEventListener("click", async function (e) {
 
         })
     } else {
-        p.innerText = "Choose two characters"
+        pError.innerText = "Choose two characters"
     }
 })
 
@@ -244,8 +270,13 @@ function addData(character, section, characterTwo) {
         character.firstFilm(characterTwo)
     })
 
+    vehiclesBtn.addEventListener("click", () => {
+        console.log("Här händer inget än, inga bilar")
+    })
+
     planetBtn.addEventListener("click", () => {
         character.planets(characterTwo)
     })
 
 }
+

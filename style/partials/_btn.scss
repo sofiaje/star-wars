@@ -19,15 +19,14 @@ button {
 }
 
 .smallBtn {
-    background-color: grey;
+    background-color: $small-btn;
+    color: #ccc9ba;
     padding: 0.2rem 0.4rem;
     margin-top: 1rem;
     margin-right: 0.3rem;
 
-
-
     &:hover {
-        background-color: rgb(94, 94, 94);
+        background-color: #37352e;
     }
 
 }
