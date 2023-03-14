@@ -49,7 +49,7 @@ class Character {
         } else if (this.mass === character.mass) {
             p.innerHTML = `They have the same weight`;
         } else {
-            p.innerHTML = `${this.name} is ${this.mass > character.mass ? "heavier" : "weight less"} than ${character.name}`;
+            p.innerHTML = `${this.name} ${this.mass > character.mass ? "is heavier" : "weight less"} than ${character.name}`;
         }
         compareDiv.append(p);
     }
@@ -68,7 +68,11 @@ class Character {
 
     compareGender(character) {
         let p = document.createElement("p");
-        this.gender === character.gender ? p.innerHTML = `They share the same gender` : "";
+        if (this.gender === "no gender" && character.gender === "no gender") {
+            p.innerHTML = `Robots don't do gender`
+        } else if (this.gender === character.gender) {
+            p.innerHTML = `They share the same gender`;
+        }
         compareDiv.append(p);
     }
 
@@ -214,7 +218,7 @@ getDataBtn.addEventListener("click", async function (e) {
             // compareBtn.disabled = true;
             if (firstCharacter.name === secondCharacter.name) {
                 let p = document.createElement("p");
-                p.innerHTML = `Same person or evil twin? Who knows?`;
+                p.innerHTML = `Same character or evil twin? Who knows?`;
                 compareDiv.append(p);
             } else {
                 firstCharacter.compareHeight(secondCharacter);
@@ -243,7 +247,7 @@ getDataBtn.addEventListener("click", async function (e) {
 
 
         })
-    
+
     }
 })
 

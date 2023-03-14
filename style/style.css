@@ -6,11 +6,10 @@ h1, h2, h3, h4, h5 {
   font-family: "Oswald", sans-serif;
   font-weight: 400;
   color: rgb(180, 176, 159);
-  padding-top: 0.5rem;
+  padding: 0.5rem 0;
 }
 
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-family: "Roboto", sans-serif;
   font-family: "Roboto Condensed", sans-serif;
 }
@@ -22,7 +21,7 @@ body {
 }
 
 p {
-  line-height: 1.5rem;
+  line-height: 1.6rem;
 }
 
 .spinner {
