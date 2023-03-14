@@ -68,9 +68,7 @@ class Character {
 
     compareGender(character) {
         let p = document.createElement("p");
-
         this.gender === character.gender ? p.innerHTML = `They share the same gender` : "";
-
         compareDiv.append(p);
     }
 
@@ -104,18 +102,13 @@ class Character {
 
     async movies(character) {
         loading();
-        console.log(this.films)
-        console.log(character.films)
         let commonFilms = this.films.filter(url => character.films.includes(url))
-        console.log(commonFilms, commonFilms.length)
         if (commonFilms.length < 1) {
             compareDiv.innerHTML = `The characters do not have any movies in common`
-        } else if (this.name === character.name) {
-            compareDiv.innerHTML = `They appear in all the same movies?!`
         } else {
             let promises = commonFilms.map(film => getData(film))
             let result = await Promise.all(promises);
-            compareDiv.innerHTML = `Both characters appear in:`
+            compareDiv.innerHTML = `${this.name === character.name ? `${this.name} appear in:` : `Both characters appear in:`}`;
             result.forEach(film => {
                 compareDiv.innerHTML += `<p>${film.title}</p>`
             })
@@ -154,7 +147,6 @@ function loading() {
 
 //get data
 async function getData(url) {
-    console.log("hämtar data")
     try {
         let res = await fetch(`${url}`);
         let data = await res.json();
@@ -173,7 +165,6 @@ async function getData(url) {
 
 //create new instance depening on user choice
 async function createInstance(value) {
-    console.log("kör igång data hämtning")
     let person = await getData(`https://swapi.dev/api/people/${value}`);
 
     let { name, height, mass, hair_color, skin_color, eye_color, gender, films, homeworld } = person
@@ -187,29 +178,30 @@ async function createInstance(value) {
 //get info button
 getDataBtn.addEventListener("click", async function (e) {
     e.preventDefault();
-    compareDiv.classList.add("hidden")
+    compareDiv.classList.add("hidden");
 
 
-    if (Number(list1.value) !== 0 && Number(list2.value) !== 0) {
+    if (Number(list1.value) === 0 || Number(list2.value) === 0) {
+        pError.innerText = "Choose two characters";
+    } else {
+        pError.innerHTML = ""
         pSpinner.innerHTML = `<i class="fa-solid fa-spinner fa-spin fa-2xl"></i>`
-        pError.innerHTML = ``
 
-        compareDiv.innerText = "";
+        // compareDiv.innerText = "";
         let firstCharacter = await createInstance(list1.value);
         let secondCharacter = await createInstance(list2.value);
-        pSpinner.innerHTML = ``
-
+        pSpinner.innerHTML = "";
         charactersDiv.innerHTML = "";
-        let sectionOne = displayData(firstCharacter);
 
+        let sectionOne = displayData(firstCharacter);
 
         let sectionTwo = document.createElement("section");
         let compareBtn = document.createElement("button");
         sectionTwo.classList.add("textSection")
         compareBtn.innerText = "compare characters";
         compareBtn.classList.add("btn", "compareBtn")
-        charactersDiv.append(sectionTwo)
         sectionTwo.append(compareBtn)
+        charactersDiv.append(sectionTwo)
 
         let sectionThree = displayData(secondCharacter);
 
@@ -239,7 +231,6 @@ getDataBtn.addEventListener("click", async function (e) {
             commonFilmsBtn.classList.add("btn", "smallBtn");
 
             commonFilmsBtn.addEventListener("click", () => {
-                console.log("Här händer inget än, ingen info om gemensamma filmer");
                 firstCharacter.movies(secondCharacter);
             })
 
@@ -252,8 +243,7 @@ getDataBtn.addEventListener("click", async function (e) {
 
 
         })
-    } else {
-        pError.innerText = "Choose two characters";
+    
     }
 })
 
