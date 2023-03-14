@@ -3,6 +3,7 @@ let charactersDiv = document.getElementById("charactersDiv");
 let compareDiv = document.getElementById("compareDiv");
 const getDataBtn = document.getElementById("getDataBtn")
 const pError = document.querySelector("p.error");
+const pSpinner = document.querySelector("p.spinnerP");
 let buttonWrapper = document.createElement("div");
 buttonWrapper.classList.add("buttonWrapper")
 
@@ -46,7 +47,7 @@ class Character {
         } else if (this.mass === character.mass) {
             p.innerHTML = `They have the same weight`;
         } else {
-            p.innerHTML = `${this.name} is ${this.mass > character.mass ? "heavier" : "lighter"} than ${character.name}`;
+            p.innerHTML = `${this.name} is ${this.mass > character.mass ? "heavier" : "weight less"} than ${character.name}`;
         }
         compareDiv.append(p);
     }
@@ -57,7 +58,7 @@ class Character {
         if (this.films.length === character.films.length) {
             p.innerHTML = `They star in the same amount of films`;
         } else {
-            p.innerHTML = `${this.name} stars in ${this.films.length > character.films.length ? "more" : "less"} movies than ${character.name}`;
+            p.innerHTML = `${this.name} appears in ${this.films.length > character.films.length ? "more" : "less"} movies than ${character.name}`;
         }
         compareDiv.append(p);
     }
@@ -93,7 +94,7 @@ class Character {
         if (this.name !== character.name) {
             data2 = await getData(character.films[0])
         }
-        compareDiv.innerHTML = `${this.name} first appered in the movie <i>${data1.title}</i>, released ${data1.release_date}. `
+        compareDiv.innerHTML = `${this.name} first appered in the movie <i>${data1.title}</i>, released in ${data1.release_date}. `
         if (data1.title === data2.title && this.name !== character.name) {
             compareDiv.innerHTML += `${character.name} was first seen in the same movie.`
         }
@@ -137,10 +138,15 @@ function loading() {
 //get data
 async function getData(url) {
     console.log("hämtar data")
-    let res = await fetch(`${url}`);
-    let data = await res.json();
+    try {
+        let res = await fetch(`${url}`);
+        let data = await res.json();
 
-    return data
+        return data
+    } catch {
+        pError.innerHTML = `Something went wrong. Please try again.`
+    }
+
 }
 
 
@@ -166,13 +172,13 @@ getDataBtn.addEventListener("click", async function (e) {
 
 
     if (Number(list1.value) !== 0 && Number(list2.value) !== 0) {
-        pError.innerHTML = `<i class="fa-solid fa-spinner fa-spin fa-2xl"></i>`
+        pSpinner.innerHTML = `<i class="fa-solid fa-spinner fa-spin fa-2xl"></i>`
+        pError.innerHTML = ``
 
         compareDiv.innerText = "";
         let firstCharacter = await createInstance(list1.value);
         let secondCharacter = await createInstance(list2.value);
-
-        pError.innerHTML = ``
+        pSpinner.innerHTML = ``
 
         charactersDiv.innerHTML = "";
         let sectionOne = displayData(firstCharacter);
@@ -190,14 +196,14 @@ getDataBtn.addEventListener("click", async function (e) {
 
         compareBtn.addEventListener("click", () => {
             sectionTwo.append(compareDiv)
-            compareDiv.innerHTML = ""
-            buttonWrapper.innerHTML = ""
-            compareDiv.classList.remove("hidden")
+            compareDiv.innerHTML = "";
+            buttonWrapper.innerHTML = "";
+            compareDiv.classList.remove("hidden");
 
             // compareBtn.disabled = true;
             if (firstCharacter.name === secondCharacter.name) {
                 let p = document.createElement("p");
-                p.innerHTML = `Same person or evil twin? Who knows?`
+                p.innerHTML = `Same person or evil twin? Who knows?`;
                 compareDiv.append(p);
             } else {
                 firstCharacter.compareHeight(secondCharacter);
@@ -209,34 +215,34 @@ getDataBtn.addEventListener("click", async function (e) {
 
 
             sectionTwo.append(buttonWrapper);
-            let commonFilmsBtn = document.createElement("button")
+            let commonFilmsBtn = document.createElement("button");
             commonFilmsBtn.innerText = "Common films";
-            commonFilmsBtn.classList.add("btn", "smallBtn")
+            commonFilmsBtn.classList.add("btn", "smallBtn");
 
             commonFilmsBtn.addEventListener("click", () => {
-                console.log("Här händer inget än, ingen info om gemensamma filmer")
+                console.log("Här händer inget än, ingen info om gemensamma filmer");
             })
 
 
 
-            buttonWrapper.append(commonFilmsBtn)
+            buttonWrapper.append(commonFilmsBtn);
 
-            addData(firstCharacter, sectionOne, secondCharacter)
-            addData(secondCharacter, sectionThree, firstCharacter)
+            addData(firstCharacter, sectionOne, secondCharacter);
+            addData(secondCharacter, sectionThree, firstCharacter);
 
 
         })
     } else {
-        pError.innerText = "Choose two characters"
+        pError.innerText = "Choose two characters";
     }
 })
 
 
 //displays data in browser
 function displayData(character) {
-    let { name, img } = character
+    let { name, img } = character;
 
-    let section = document.createElement("section")
+    let section = document.createElement("section");
     section.innerHTML = `<img src="images/${img}.png" class="small img" alt=""><h2>${name}</h2>`
     charactersDiv.append(section);
     return section;
@@ -245,7 +251,7 @@ function displayData(character) {
 
 //add additional data
 function addData(character, section, characterTwo) {
-    let { name, height, mass, hair_color, skin_color, eye_color, gender, films, img } = character
+    let { name, height, mass, hair_color, skin_color, eye_color, gender, films, img } = character;
 
     section.innerHTML = `<img src="images/${img}.png" class="small img" alt=""><h2>${name}</h2><p>
     Height: ${height}<br>
@@ -257,23 +263,23 @@ function addData(character, section, characterTwo) {
     Films: ${films.length}<br>
     </p>`;
 
-    let filmBtn = document.createElement("button")
+    let filmBtn = document.createElement("button");
     filmBtn.innerText = "First apperence";
-    filmBtn.classList.add("btn", "smallBtn")
+    filmBtn.classList.add("btn", "smallBtn");
 
-    let commonFilmsBtn = document.createElement("button")
+    let commonFilmsBtn = document.createElement("button");
     commonFilmsBtn.innerText = "Common films";
-    commonFilmsBtn.classList.add("btn", "smallBtn")
+    commonFilmsBtn.classList.add("btn", "smallBtn");
 
-    let vehiclesBtn = document.createElement("button")
+    let vehiclesBtn = document.createElement("button");
     vehiclesBtn.innerText = "Vechicles";
-    vehiclesBtn.classList.add("btn", "smallBtn")
+    vehiclesBtn.classList.add("btn", "smallBtn");
 
-    let planetBtn = document.createElement("button")
+    let planetBtn = document.createElement("button");
     planetBtn.innerText = "Planet";
-    planetBtn.classList.add("btn", "smallBtn")
+    planetBtn.classList.add("btn", "smallBtn");
 
-    section.append(filmBtn, vehiclesBtn, planetBtn)
+    section.append(filmBtn, vehiclesBtn, planetBtn);
 
     filmBtn.addEventListener("click", () => {
         character.firstFilm(characterTwo)
