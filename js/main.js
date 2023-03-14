@@ -1,6 +1,8 @@
 //global
 let charactersDiv = document.getElementById("charactersDiv");
-let compareDiv = document.getElementById("compareDiv");
+// let compareDiv = document.getElementById("compareDiv");
+let compareDiv = document.createElement("div");
+compareDiv.classList.add("compareDiv", "hidden")
 const getDataBtn = document.getElementById("getDataBtn")
 const pError = document.querySelector("p.error");
 const pSpinner = document.querySelector("p.spinnerP");
@@ -102,7 +104,22 @@ class Character {
 
     async movies(character) {
         loading();
-
+        console.log(this.films)
+        console.log(character.films)
+        let commonFilms = this.films.filter(url => character.films.includes(url))
+        console.log(commonFilms, commonFilms.length)
+        if (commonFilms.length < 1) {
+            compareDiv.innerHTML = `The characters do not have any movies in common`
+        } else if (this.name === character.name) {
+            compareDiv.innerHTML = `They appear in all the same movies?!`
+        } else {
+            let promises = commonFilms.map(film => getData(film))
+            let result = await Promise.all(promises);
+            compareDiv.innerHTML = `Both characters appear in:`
+            result.forEach(film => {
+                compareDiv.innerHTML += `<p>${film.title}</p>`
+            })
+        }
     }
 
     async planets(character) {
@@ -143,8 +160,11 @@ async function getData(url) {
         let data = await res.json();
 
         return data
-    } catch {
+    } catch (error) {
+        console.log(error);
+        pSpinner.innerHTML = "";
         pError.innerHTML = `Something went wrong. Please try again.`
+
     }
 
 }
@@ -213,13 +233,14 @@ getDataBtn.addEventListener("click", async function (e) {
             }
 
 
-            sectionTwo.append(buttonWrapper);
+            sectionTwo.insertBefore(buttonWrapper, compareDiv);
             let commonFilmsBtn = document.createElement("button");
             commonFilmsBtn.innerText = "Common films";
             commonFilmsBtn.classList.add("btn", "smallBtn");
 
             commonFilmsBtn.addEventListener("click", () => {
                 console.log("Här händer inget än, ingen info om gemensamma filmer");
+                firstCharacter.movies(secondCharacter);
             })
 
 

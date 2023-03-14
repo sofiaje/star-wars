@@ -72,23 +72,22 @@ body {
   color: #b4b09f;
 }
 
-section.textSection {
-  border: none;
+.textSection {
   width: 100%;
   order: 1;
 }
 @media (width >= 576px) {
-  section.textSection {
+  .textSection {
     width: 60%;
   }
 }
 @media (width >= 768px) {
-  section.textSection {
+  .textSection {
     width: 50%;
   }
 }
 @media (width >= 1200px) {
-  section.textSection {
+  .textSection {
     flex-grow: 1;
     order: 0;
   }
@@ -131,18 +130,14 @@ section.textSection {
   }
 }
 
-section {
-  padding: 0.5rem;
-  border: 2px dotted #535146;
-  border-radius: 1rem;
-}
-
-#compareDiv {
+.compareDiv {
   margin: 2rem 1rem;
   text-align: left;
   border: 2px dotted #535146;
   border-radius: 1rem;
   padding: 1rem;
+  align-items: center;
+  display: inline-block;
 }
 
 .hidden {

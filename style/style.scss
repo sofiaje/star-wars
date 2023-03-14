@@ -14,8 +14,7 @@ body {
     color: $bodytext-color;
 }
 
-section.textSection {
-    border: none;
+.textSection {
     width: 100%;
     order: 1;
     @media ($sm) {
@@ -65,17 +64,14 @@ section.textSection {
     }
 }
 
-section {
-    padding: 0.5rem;
-    border: 2px dotted $small-btn;
-    border-radius: 1rem;
-}
-#compareDiv {
+.compareDiv {
     margin: 2rem 1rem;
     text-align: left;
     border: 2px dotted $small-btn;
     border-radius: 1rem;
     padding: 1rem;
+    align-items: center;
+    display: inline-block;
     // max-width: 800px;
 }
 
