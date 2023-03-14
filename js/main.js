@@ -80,7 +80,7 @@ class Character {
         } else if (this.hair_color === character.hair_color) {
             p.innerHTML = `They share the same haircolor. `
         } else if (this.hair_color.includes(character.hair_color) || character.hair_color.includes(this.hair_color)) {
-            p.innerHTML = `(Some hairs are the same color). `
+            p.innerHTML = `Some hairs are the same color. `
         }
 
         this.skin_color === character.skin_color ? p.innerHTML += `They share the same skincolor` : "";
@@ -168,7 +168,6 @@ async function createInstance(value) {
 getDataBtn.addEventListener("click", async function (e) {
     e.preventDefault();
     compareDiv.classList.add("hidden")
-
 
 
     if (Number(list1.value) !== 0 && Number(list2.value) !== 0) {

@@ -72,18 +72,24 @@ body {
   color: #b4b09f;
 }
 
-.textSection {
+section.textSection {
+  border: none;
   width: 100%;
   order: 1;
 }
 @media (width >= 576px) {
-  .textSection {
+  section.textSection {
+    width: 60%;
+  }
+}
+@media (width >= 768px) {
+  section.textSection {
     width: 50%;
   }
 }
 @media (width >= 1200px) {
-  .textSection {
-    width: 33%;
+  section.textSection {
+    flex-grow: 1;
     order: 0;
   }
 }
@@ -92,7 +98,7 @@ body {
   margin: 0 auto;
   padding: 0.5rem;
   text-align: center;
-  max-width: 1200px;
+  max-width: 1300px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -123,6 +129,12 @@ body {
     gap: 2rem;
     flex-wrap: nowrap;
   }
+}
+
+section {
+  padding: 0.5rem;
+  border: 2px dotted #535146;
+  border-radius: 1rem;
 }
 
 #compareDiv {
