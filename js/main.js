@@ -43,7 +43,7 @@ class Character {
         let p = document.createElement("p");
         if (!Number(this.mass) || !Number(character.mass)) {
             p.innerHTML = "Someone is keeping their weight a secret!"
-        } else if(this.mass === character.mass) {
+        } else if (this.mass === character.mass) {
             p.innerHTML = `They have the same weight`;
         } else {
             p.innerHTML = `${this.name} is ${this.mass > character.mass ? "heavier" : "lighter"} than ${character.name}`;
@@ -54,11 +54,11 @@ class Character {
 
     compareFilms(character) {
         let p = document.createElement("p");
-        if (this.films.length === character.films.length) { 
+        if (this.films.length === character.films.length) {
             p.innerHTML = `They star in the same amount of films`;
         } else {
             p.innerHTML = `${this.name} stars in ${this.films.length > character.films.length ? "more" : "less"} movies than ${character.name}`;
-        } 
+        }
         compareDiv.append(p);
     }
 
@@ -66,7 +66,7 @@ class Character {
     compareGender(character) {
         let p = document.createElement("p");
 
-        this.gender === character.gender ? p.innerHTML = `Same gender` : "";
+        this.gender === character.gender ? p.innerHTML = `They share the same gender` : "";
 
         compareDiv.append(p);
     }
@@ -75,24 +75,27 @@ class Character {
     compareHairAndSkin(character) {
         let p = document.createElement("p");
         if (this.hair_color === "no hair on this body" && character.hair_color === "no hair on this body") {
-            console.log("Robots don't do hair")
+            p.innerHTML = `Robots don't do hair`
         } else if (this.hair_color === character.hair_color) {
-            p.innerHTML = `Same haircolor. `
+            p.innerHTML = `They share the same haircolor. `
         } else if (this.hair_color.includes(character.hair_color) || character.hair_color.includes(this.hair_color)) {
             p.innerHTML = `(Some hairs are the same color). `
         }
 
-        this.skin_color === character.skin_color ? p.innerHTML += `Same skincolor` : "";
+        this.skin_color === character.skin_color ? p.innerHTML += `They share the same skincolor` : "";
         compareDiv.append(p);
     }
-    
+
     async firstFilm(character) {
         loading();
         let data1 = await getData(this.films[0])
-        let data2 = await getData(character.films[0])
+        let data2 = "";
+        if (this.name !== character.name) {
+            data2 = await getData(character.films[0])
+        }
         compareDiv.innerHTML = `${this.name} first appered in the movie <i>${data1.title}</i>, released ${data1.release_date}. `
         if (data1.title === data2.title && this.name !== character.name) {
-            compareDiv.innerHTML += `<br>${character.name} was first seen in the same movie.`
+            compareDiv.innerHTML += `${character.name} was first seen in the same movie.`
         }
     }
 
@@ -103,13 +106,17 @@ class Character {
 
     async planets(character) {
         loading();
+
         let data1 = await getData(this.homeworld);
-        let data2 = await getData(character.homeworld);
+        let data2 = "";
+        if (this.name !== character.name) {
+            data2 = await getData(character.homeworld);
+        }
         // console.log(data1.name + " and " + data2.name);
         if (data1.name === data2.name && this.name !== character.name) {
-            compareDiv.innerHTML = `${this.name} and ${character.name} share the same home planet, the name of this planet is ${data1.name}`;
+            compareDiv.innerHTML = `${this.name} and ${character.name} share the same home planet, the name of this planet is ${data1.name}.`;
         } else {
-            compareDiv.innerHTML = `The name of ${this.name}'s home world is ${data1.name}.`
+            compareDiv.innerHTML = `The name of ${this.name}'s home planet is ${data1.name}.`
         }
     }
 }
@@ -123,12 +130,13 @@ class Character {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function loading() {
-    compareDiv.innerHTML = `<i class="fa-solid fa-spinner fa-spin fa-lg"></i>`;
+    compareDiv.innerHTML = `<p class="spinner"><i class="fa-solid fa-spinner fa-spin fa-lg"></i><p>`;
 }
 
 
 //get data
 async function getData(url) {
+    console.log("hämtar data")
     let res = await fetch(`${url}`);
     let data = await res.json();
 
@@ -181,6 +189,7 @@ getDataBtn.addEventListener("click", async function (e) {
         let sectionThree = displayData(secondCharacter);
 
         compareBtn.addEventListener("click", () => {
+            sectionTwo.append(compareDiv)
             compareDiv.innerHTML = ""
             buttonWrapper.innerHTML = ""
             compareDiv.classList.remove("hidden")
