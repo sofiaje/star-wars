@@ -13,6 +13,9 @@ body {
     background-color: $bg-color;
     color: $bodytext-color;
 }
+section {
+    width: 30%;
+}
 
 #pagewrapper {
     text-align: center;
@@ -25,7 +28,7 @@ body {
     margin-top: 1rem;
 }
 #charactersDiv {
-    text-align: left;
+    // text-align: left;
 
     margin-top: 3rem;
     display: flex;
@@ -34,7 +37,7 @@ body {
     justify-content: space-between;
     margin-bottom: 3rem;
     
-    @media ($sm) {
+    @media ($md) {
         flex-direction: row;
         gap: 0rem;
     }

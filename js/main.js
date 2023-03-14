@@ -91,9 +91,14 @@ class Character {
         this.skin_color === character.skin_color ? p.innerHTML += `Same skincolor` : "";
         compareDiv.append(p);
     }
-    async firstFilm() {
-        let data = await getData(this.films[0])
-        compareDiv.innerHTML = `${this.name} first appered in the movie <i>${data.title}</i>, released ${data.release_date}`
+    async firstFilm(character) {
+
+        let data1 = await getData(this.films[0])
+        let data2 = await getData(character.films[0])
+        compareDiv.innerHTML = `${this.name} first appered in the movie <i>${data1.title}</i>, released ${data1.release_date}. `
+        if (data1.title === data2.title) {
+            compareDiv.innerHTML += `<br>${character.name} was first seen in the same movie.`
+        }
     }
     async movies(character) {
 
@@ -105,8 +110,7 @@ class Character {
         if (data1.name === data2.name) {
             compareDiv.innerHTML = `${this.name} and ${character.name} share the same home world, the name is ${data1.name}`;
         } else {
-            compareDiv.innerHTML = `The name of ${this.name}'s home world is ${data1.name}. `
-            compareDiv.innerHTML += `The name of ${character.name}'s home world is ${data2.name}.`
+            compareDiv.innerHTML = `The name of ${this.name}'s home world is ${data1.name}.`
         }
     }
 }
@@ -131,6 +135,7 @@ async function createInstance(value) {
     let newPerson = new Character(name, height, mass, hair_color, skin_color, eye_color, gender, films, value, homeworld)
     return newPerson
 }
+
 
 
 //get info button
@@ -178,18 +183,12 @@ getDataBtn.addEventListener("click", async function (e) {
             commonFilmsBtn.innerText = "Common films";
             commonFilmsBtn.classList.add("btn", "smallBtn")
 
-            let planetBtn = document.createElement("button")
-            planetBtn.innerText = "Planet";
-            planetBtn.classList.add("btn", "smallBtn")
 
-            buttonWrapper.append(commonFilmsBtn, planetBtn)
+            buttonWrapper.append(commonFilmsBtn)
 
-            addData(firstCharacter, sectionOne)
-            addData(secondCharacter, sectionThree)
+            addData(firstCharacter, sectionOne, secondCharacter)
+            addData(secondCharacter, sectionThree, firstCharacter)
 
-            planetBtn.addEventListener("click", () => {
-                firstCharacter.planets(secondCharacter)
-            })
 
         })
     } else {
@@ -210,7 +209,7 @@ function displayData(character) {
 
 
 //add additional data
-function addData(character, section) {
+function addData(character, section, characterTwo) {
     let { name, height, mass, hair_color, skin_color, eye_color, gender, films, img } = character
 
     section.innerHTML = `<img src="images/${img}.png" class="small img" alt=""><h2>${name}</h2><p>
@@ -235,10 +234,18 @@ function addData(character, section) {
     vehiclesBtn.innerText = "Vechicles";
     vehiclesBtn.classList.add("btn", "smallBtn")
 
-    section.append(filmBtn, vehiclesBtn)
+    let planetBtn = document.createElement("button")
+    planetBtn.innerText = "Planet";
+    planetBtn.classList.add("btn", "smallBtn")
+
+    section.append(filmBtn, vehiclesBtn, planetBtn)
 
     filmBtn.addEventListener("click", () => {
-        character.firstFilm()
+        character.firstFilm(characterTwo)
+    })
+
+    planetBtn.addEventListener("click", () => {
+        character.planets(characterTwo)
     })
 
 }
