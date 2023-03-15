@@ -3,6 +3,7 @@ let charactersDiv = document.getElementById("charactersDiv");
 // let compareDiv = document.getElementById("compareDiv");
 let compareDiv = document.createElement("div");
 compareDiv.classList.add("compareDiv", "hidden")
+compareDiv.setAttribute("id", "compare")
 const getDataBtn = document.getElementById("getDataBtn")
 const pError = document.querySelector("p.error");
 const pSpinner = document.querySelector("p.spinnerP");
@@ -69,7 +70,7 @@ class Character {
     compareGender(character) {
         let p = document.createElement("p");
         if (this.gender === "no gender" && character.gender === "no gender") {
-            p.innerHTML = `Robots don't do gender`
+            p.innerHTML = `Robots don't have genders—they're metal and plastic and silicon, and filled with ones and zeroes`
         } else if (this.gender === character.gender) {
             p.innerHTML = `They share the same gender`;
         }
@@ -92,7 +93,7 @@ class Character {
     }
 
     async firstFilm(character) {
-        loading();
+        loading(compareDiv);
         let data1 = await getData(this.films[0])
         let data2 = "";
         if (this.name !== character.name) {
@@ -105,14 +106,14 @@ class Character {
     }
 
     async movies(character) {
-        loading();
+        loading(compareDiv);
         let commonFilms = this.films.filter(url => character.films.includes(url))
         if (commonFilms.length < 1) {
             compareDiv.innerHTML = `The characters do not have any movies in common`
         } else {
             let promises = commonFilms.map(film => getData(film))
             let result = await Promise.all(promises);
-            compareDiv.innerHTML = `${this.name === character.name ? `${this.name} appear in:` : `Both characters appear in:`}`;
+            compareDiv.innerHTML = `<p>${this.name === character.name ? `${this.name} appear in:` : `Both characters appear in:`}</p>`;
             result.forEach(film => {
                 compareDiv.innerHTML += `<p>${film.title}</p>`
             })
@@ -120,18 +121,20 @@ class Character {
     }
 
     async planets(character) {
-        loading();
+        loading(compareDiv);
 
         let data1 = await getData(this.homeworld);
         let data2 = "";
         if (this.name !== character.name) {
             data2 = await getData(character.homeworld);
         }
-        // console.log(data1.name + " and " + data2.name);
+
         if (data1.name === data2.name && this.name !== character.name) {
             compareDiv.innerHTML = `${this.name} and ${character.name} share the same home planet, the name of this planet is ${data1.name}.`;
-        } else {
+        } else if (this.name === character.name) {
             compareDiv.innerHTML = `The name of ${this.name}'s home planet is ${data1.name}.`
+        } else {
+            compareDiv.innerHTML = `The name of ${this.name}'s home planet is ${data1.name}. The name of ${character.name}'s home planet is ${data2.name}.`
         }
     }
 }
@@ -144,12 +147,30 @@ class Character {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function loading() {
-    compareDiv.innerHTML = `<p class="spinner"><i class="fa-solid fa-spinner fa-spin fa-lg"></i><p>`;
+
+//helping functions
+function loading(element, size = "lg") {
+    element.innerHTML = `<i class="fa-solid fa-spinner fa-spin fa-${size}"></i>`;
+}
+
+function clear(element) {
+    element.innerHTML = ""
+}
+
+function createBtn(text) {
+    let btn = document.createElement("button");
+    btn.innerText = text;
+    btn.classList.add("btn", "smallBtn");
+    return btn
 }
 
 
-//get data
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+//get data from api
 async function getData(url) {
     try {
         let res = await fetch(`${url}`);
@@ -158,16 +179,14 @@ async function getData(url) {
         return data
     } catch (error) {
         console.log(error);
-        pSpinner.innerHTML = "";
+        clear(pSpinner);
         pError.innerHTML = `Something went wrong. Please try again.`
-
     }
-
 }
 
 
 
-//create new instance depening on user choice
+//create new instance depending on user choice
 async function createInstance(value) {
     let person = await getData(`https://swapi.dev/api/people/${value}`);
 
@@ -176,6 +195,11 @@ async function createInstance(value) {
     let newPerson = new Character(name, height, mass, hair_color, skin_color, eye_color, gender, films, value, homeworld)
     return newPerson
 }
+
+
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -188,14 +212,14 @@ getDataBtn.addEventListener("click", async function (e) {
     if (Number(list1.value) === 0 || Number(list2.value) === 0) {
         pError.innerText = "Choose two characters";
     } else {
-        pError.innerHTML = ""
-        pSpinner.innerHTML = `<i class="fa-solid fa-spinner fa-spin fa-2xl"></i>`
+        clear(pError)
+        loading(pSpinner, "2xl")
 
         // compareDiv.innerText = "";
         let firstCharacter = await createInstance(list1.value);
         let secondCharacter = await createInstance(list2.value);
-        pSpinner.innerHTML = "";
-        charactersDiv.innerHTML = "";
+        clear(pSpinner)
+        clear(charactersDiv)
 
         let sectionOne = displayData(firstCharacter);
 
@@ -211,8 +235,8 @@ getDataBtn.addEventListener("click", async function (e) {
 
         compareBtn.addEventListener("click", () => {
             sectionTwo.append(compareDiv)
-            compareDiv.innerHTML = "";
-            buttonWrapper.innerHTML = "";
+            clear(compareDiv)
+            clear(buttonWrapper)
             compareDiv.classList.remove("hidden");
 
             // compareBtn.disabled = true;
@@ -230,9 +254,13 @@ getDataBtn.addEventListener("click", async function (e) {
 
 
             sectionTwo.insertBefore(buttonWrapper, compareDiv);
-            let commonFilmsBtn = document.createElement("button");
-            commonFilmsBtn.innerText = "Common films";
-            commonFilmsBtn.classList.add("btn", "smallBtn");
+            let commonFilmsBtn = createBtn("Same movies")
+            let planetBtn = createBtn("Planets")
+
+
+            planetBtn.addEventListener("click", () => {
+                firstCharacter.planets(secondCharacter)
+            })
 
             commonFilmsBtn.addEventListener("click", () => {
                 firstCharacter.movies(secondCharacter);
@@ -240,7 +268,7 @@ getDataBtn.addEventListener("click", async function (e) {
 
 
 
-            buttonWrapper.append(commonFilmsBtn);
+            buttonWrapper.append(commonFilmsBtn, planetBtn);
 
             addData(firstCharacter, sectionOne, secondCharacter);
             addData(secondCharacter, sectionThree, firstCharacter);
@@ -277,23 +305,9 @@ function addData(character, section, characterTwo) {
     Films: ${films.length}<br>
     </p>`;
 
-    let filmBtn = document.createElement("button");
-    filmBtn.innerText = "First apperence";
-    filmBtn.classList.add("btn", "smallBtn");
-
-    let commonFilmsBtn = document.createElement("button");
-    commonFilmsBtn.innerText = "Common films";
-    commonFilmsBtn.classList.add("btn", "smallBtn");
-
-    let vehiclesBtn = document.createElement("button");
-    vehiclesBtn.innerText = "Vechicles";
-    vehiclesBtn.classList.add("btn", "smallBtn");
-
-    let planetBtn = document.createElement("button");
-    planetBtn.innerText = "Planet";
-    planetBtn.classList.add("btn", "smallBtn");
-
-    section.append(filmBtn, vehiclesBtn, planetBtn);
+    let filmBtn = createBtn("First apperence")
+    let vehiclesBtn = createBtn("Vechicles")
+    section.append(filmBtn, vehiclesBtn);
 
     filmBtn.addEventListener("click", () => {
         character.firstFilm(characterTwo)
@@ -303,9 +317,6 @@ function addData(character, section, characterTwo) {
         console.log("Här händer inget än, inga bilar")
     })
 
-    planetBtn.addEventListener("click", () => {
-        character.planets(characterTwo)
-    })
 
 }
 
