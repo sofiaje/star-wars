@@ -136,7 +136,7 @@ function displayData(character) {
     let { name, img } = character;
 
     let section = document.createElement("section");
-    section.innerHTML = `<img src="images/${img}.png" class="small img" alt=""><h2>${name}</h2>`
+    section.innerHTML = `<img src="images/${img}.png" class="small img" alt="picturs of ${name}"><h2>${name}</h2>`
     charactersDiv.append(section);
 
     return section;
