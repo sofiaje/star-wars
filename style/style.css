@@ -163,10 +163,43 @@ button {
   display: none;
 }
 
+select {
+  background-color: #535146;
+  border: 0px;
+  color: #b4b09f;
+  padding: 0.5rem 0.5rem 0.5rem 1.1rem;
+  width: 120%;
+}
+select:focus {
+  outline: none;
+}
+
+.selectBtn {
+  background-color: #baa13d;
+  color: white;
+  border: 1px solid #baa13d;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.align {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.selectdiv {
+  overflow: hidden;
+  border: 1px solid #535146;
+  border-radius: 1rem;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: all 0.5s ease;
 }
 
 body {

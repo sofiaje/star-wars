@@ -1,0 +1,29 @@
+select {
+    background-color: $small-btn;
+    border: 0px;
+    color: $bodytext-color;
+    padding: 0.5rem 0.5rem 0.5rem 1.1rem;
+    width: 120%;
+    &:focus {
+        outline: none;
+    }
+}
+
+.selectBtn {
+    background-color: $btn-color;
+    color: $p-white;
+    border: 1px solid $btn-color;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+}
+.align {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+.selectdiv {
+    overflow: hidden;
+    border: 1px solid $small-btn;
+    border-radius: 1rem;
+}

@@ -158,8 +158,8 @@ function addData(character, section, characterTwo) {
     </p>`;
 
 
-    let filmBtn = createBtn("First apperence", "smallBtn")
-    let vehiclesBtn = createBtn("Vechicles", "smallBtn")
+    let filmBtn = createBtn("First appearance", "smallBtn")
+    let vehiclesBtn = createBtn("Vehicles", "smallBtn")
     section.append(filmBtn, vehiclesBtn);
 
     filmBtn.addEventListener("click", () => {

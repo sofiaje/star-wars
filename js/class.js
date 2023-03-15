@@ -52,7 +52,7 @@ class Character {
         } else if (this.mass === character.mass) {
             p.innerHTML = `They have the same weight`;
         } else {
-            p.innerHTML = `${this.name} ${this.mass > character.mass ? "is heavier" : "weight less"} than ${character.name}`;
+            p.innerHTML = `${this.name} ${this.mass > character.mass ? "is heavier" : "weighs less"} than ${character.name}`;
         }
         compareDiv.append(p);
     }
@@ -98,7 +98,7 @@ class Character {
         if (this.name !== character.name) {
             data2 = await getData(character.films[0])
         }
-        compareDiv.innerHTML = `${this.name} first appered in the movie <i>${data1.title}</i>, released in ${data1.release_date}. `
+        compareDiv.innerHTML = `${this.name} first appeared in the movie <i>${data1.title}</i>, released in ${data1.release_date}. `
         if (data1.title === data2.title && this.name !== character.name) {
             compareDiv.innerHTML += `${character.name} was first seen in the same movie.`
         }
