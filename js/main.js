@@ -1,6 +1,5 @@
 //global
 let charactersDiv = document.getElementById("charactersDiv");
-// let compareDiv = document.getElementById("compareDiv");
 let compareDiv = document.createElement("div");
 compareDiv.classList.add("compareDiv", "hidden")
 compareDiv.setAttribute("id", "compare")
@@ -12,6 +11,8 @@ buttonWrapper.classList.add("buttonWrapper")
 
 const list1 = document.getElementById("list1");
 const list2 = document.getElementById("list2");
+
+let characters = [];
 
 
 //class character
@@ -25,7 +26,7 @@ class Character {
         this.eye_color = eyeColor;
         this.gender = gender === "n/a" ? "no gender" : gender;
         this.films = films;
-        this.img = img;
+        this.img = Number(img);
         this.homeworld = homeworld;
         this.transports = vehicles.concat(starships)
     }
@@ -61,7 +62,6 @@ class Character {
         compareDiv.append(p);
     }
 
-
     compareMass(character) {
         let p = document.createElement("p");
         if (!Number(this.mass) || !Number(character.mass)) {
@@ -74,7 +74,6 @@ class Character {
         compareDiv.append(p);
     }
 
-
     compareFilms(character) {
         let p = document.createElement("p");
         if (this.films.length === character.films.length) {
@@ -85,7 +84,6 @@ class Character {
         compareDiv.append(p);
     }
 
-
     compareGender(character) {
         let p = document.createElement("p");
         if (this.gender === "no gender" && character.gender === "no gender") {
@@ -95,7 +93,6 @@ class Character {
         }
         compareDiv.append(p);
     }
-
 
     compareHairAndSkin(character) {
         let p = document.createElement("p");
@@ -112,7 +109,6 @@ class Character {
     }
 
     async firstFilm(character) {
-        console.log(this.films)
         loading(compareDiv);
         let data1 = await getData(this.films[0])
         let data2 = "";
@@ -123,6 +119,7 @@ class Character {
         if (data1.title === data2.title && this.name !== character.name) {
             compareDiv.innerHTML += `${character.name} was first seen in the same movie.`
         }
+        return compareDiv;
     }
 
     async movies(character) {
@@ -162,8 +159,6 @@ class Character {
 
 
 
-
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -177,10 +172,10 @@ function clear(element) {
     element.innerHTML = ""
 }
 
-function createBtn(text) {
+function createBtn(text, aclass) {
     let btn = document.createElement("button");
     btn.innerText = text;
-    btn.classList.add("btn", "smallBtn");
+    btn.classList.add("btn", aclass);
     return btn
 }
 
@@ -208,12 +203,20 @@ async function getData(url) {
 
 //create new instance depending on user choice
 async function createInstance(value) {
+    console.log(value)
+    let test = characters.filter(e => e.img === Number(value))
+    if (test.length > 0) {
+        console.log("har redan hämtats en gång")
+        return test[0]
+    }
+
     let person = await getData(`https://swapi.dev/api/people/${value}`);
 
     let { name, height, mass, hair_color, skin_color, eye_color, gender, films, homeworld, vehicles, starships } = person
 
     let newPerson = new Character(name, height, mass, hair_color, skin_color, eye_color, gender, films, value, homeworld, vehicles, starships)
     console.log(newPerson)
+    characters.push(newPerson)
     return newPerson
 }
 
@@ -223,32 +226,32 @@ async function createInstance(value) {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 
-
 //get info button
 getDataBtn.addEventListener("click", async function (e) {
     e.preventDefault();
     compareDiv.classList.add("hidden");
 
-
+    console.log(list1.value, list2.value)
     if (Number(list1.value) === 0 || Number(list2.value) === 0) {
         pError.innerText = "Choose two characters";
     } else {
         clear(pError)
         loading(pSpinner, "2xl")
 
+
         // compareDiv.innerText = "";
-        let firstCharacter = await createInstance(list1.value);
-        let secondCharacter = await createInstance(list2.value);
+        let firstCharacter = await createInstance(Number(list1.value));
+        let secondCharacter = await createInstance(Number(list2.value));
+        console.log("first character", firstCharacter)
         clear(pSpinner)
         clear(charactersDiv)
 
         let sectionOne = displayData(firstCharacter);
 
         let sectionTwo = document.createElement("section");
-        let compareBtn = document.createElement("button");
         sectionTwo.classList.add("textSection")
-        compareBtn.innerText = "compare characters";
-        compareBtn.classList.add("btn", "compareBtn")
+        let compareBtn = createBtn("compare characters", "compareBtn")
+
         sectionTwo.append(compareBtn)
         charactersDiv.append(sectionTwo)
 
@@ -273,11 +276,9 @@ getDataBtn.addEventListener("click", async function (e) {
                 firstCharacter.compareHairAndSkin(secondCharacter);
             }
 
-
             sectionTwo.insertBefore(buttonWrapper, compareDiv);
-            let commonFilmsBtn = createBtn("Same movies")
-            let planetBtn = createBtn("Planets")
-
+            let commonFilmsBtn = createBtn("Same movies", "smallBtn")
+            let planetBtn = createBtn("Planets", "smallBtn")
 
             planetBtn.addEventListener("click", () => {
                 firstCharacter.planets(secondCharacter)
@@ -287,16 +288,11 @@ getDataBtn.addEventListener("click", async function (e) {
                 firstCharacter.movies(secondCharacter);
             })
 
-
-
             buttonWrapper.append(commonFilmsBtn, planetBtn);
 
             addData(firstCharacter, sectionOne, secondCharacter);
             addData(secondCharacter, sectionThree, firstCharacter);
-
-
         })
-
     }
 })
 
@@ -308,13 +304,14 @@ function displayData(character) {
     let section = document.createElement("section");
     section.innerHTML = `<img src="images/${img}.png" class="small img" alt=""><h2>${name}</h2>`
     charactersDiv.append(section);
+
     return section;
 }
 
 
 //add additional data
 function addData(character, section, characterTwo) {
-    let { name, height, mass, hair_color, skin_color, eye_color, gender, films, img, transports } = character;
+    let { name, height, mass, hair_color, skin_color, eye_color, gender, films, img } = character;
 
     section.innerHTML = `<img src="images/${img}.png" class="small img" alt=""><h2>${name}</h2><p>
     Height: ${height}<br>
@@ -324,11 +321,11 @@ function addData(character, section, characterTwo) {
     Eye color: ${eye_color}<br>
     Gender: ${gender}<br>
     Films: ${films.length}<br>
-    Transports: ${transports.length}<br>
     </p>`;
 
-    let filmBtn = createBtn("First apperence")
-    let vehiclesBtn = createBtn("Vechicles")
+
+    let filmBtn = createBtn("First apperence", "smallBtn")
+    let vehiclesBtn = createBtn("Vechicles", "smallBtn")
     section.append(filmBtn, vehiclesBtn);
 
     filmBtn.addEventListener("click", () => {
@@ -339,6 +336,6 @@ function addData(character, section, characterTwo) {
         character.expensiveVehicles()
     })
 
-
+    //kolla min array
 }
 

@@ -1,7 +1,3 @@
-/* @media ($md) {
-
-    }
-*/
 h1, h2, h3, h4, h5 {
   font-family: "Oswald", sans-serif;
   font-weight: 400;
@@ -73,6 +69,10 @@ body {
 }
 
 .textSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   width: 100%;
   order: 1;
 }
@@ -136,8 +136,13 @@ body {
   border: 2px dotted #535146;
   border-radius: 1rem;
   padding: 1rem;
-  align-items: center;
+  align-self: center;
   display: inline-block;
+}
+@media (width >= 768px) {
+  .compareDiv {
+    margin: 2rem 0rem;
+  }
 }
 
 .hidden {
@@ -168,4 +173,14 @@ body {
   .small.img {
     max-height: 400px;
   }
+}
+
+.win {
+  color: white;
+}
+.win::before {
+  content: "-";
+}
+.win::after {
+  content: "-";
 }/*# sourceMappingURL=style.css.map */
