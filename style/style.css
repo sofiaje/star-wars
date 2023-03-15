@@ -82,18 +82,6 @@ button {
   }
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background-color: #0b0b09;
-  background-image: url(../images/stars.png);
-  color: #b4b09f;
-}
-
 .textSection {
   display: flex;
   flex-direction: column;
@@ -175,12 +163,14 @@ body {
   display: none;
 }
 
-.win {
-  color: white;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.win::before {
-  content: "-";
-}
-.win::after {
-  content: "-";
+
+body {
+  background-color: #0b0b09;
+  background-image: url(/images/stars.png);
+  color: #b4b09f;
 }/*# sourceMappingURL=style.css.map */
