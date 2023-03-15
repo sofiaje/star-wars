@@ -56,6 +56,32 @@ button {
   background-color: #37352e;
 }
 
+.image {
+  align-self: center;
+  max-width: 600px;
+  width: 100%;
+  padding: 1rem;
+}
+
+.small.img {
+  max-height: 300px;
+}
+@media (width >= 406px) {
+  .small.img {
+    max-height: 400px;
+  }
+}
+@media (width >= 768px) {
+  .small.img {
+    max-height: 350px;
+  }
+}
+@media (width >= 1200px) {
+  .small.img {
+    max-height: 400px;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -147,32 +173,6 @@ body {
 
 .hidden {
   display: none;
-}
-
-.image {
-  align-self: center;
-  max-width: 600px;
-  width: 100%;
-  padding: 1rem;
-}
-
-.small.img {
-  max-height: 300px;
-}
-@media (width >= 406px) {
-  .small.img {
-    max-height: 400px;
-  }
-}
-@media (width >= 768px) {
-  .small.img {
-    max-height: 350px;
-  }
-}
-@media (width >= 1200px) {
-  .small.img {
-    max-height: 400px;
-  }
 }
 
 .win {

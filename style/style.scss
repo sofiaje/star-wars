@@ -1,6 +1,7 @@
 @import "partials/variables";
 @import "partials/text";
 @import "partials/btn";
+@import "partials/images";
 
 
 * {
@@ -85,25 +86,9 @@ body {
     display: none;
 }
 
-.image {
-    align-self: center;
-    max-width: 600px;
-    width: 100%;
-    padding: 1rem;
-}
 
-.small.img{
-    max-height: 300px;
-    @media ($xs){
-        max-height: 400px;
-    }
-    @media ($md){
-        max-height: 350px;
-    }
-    @media ($xl){
-        max-height: 400px;
-    }
-}
+
+
 
 .win {
     color: white;
