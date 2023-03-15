@@ -89,7 +89,8 @@ button {
 }
 
 body {
-  background-image: url(/images/stars.png);
+  background-color: #0b0b09;
+  background-image: url(../images/stars.png);
   color: #b4b09f;
 }
 
