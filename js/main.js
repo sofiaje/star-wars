@@ -16,7 +16,7 @@ const list2 = document.getElementById("list2");
 
 //class character
 class Character {
-    constructor(name, height, mass, hairColor, skinColor, eyeColor, gender, films, img, homeworld) {
+    constructor(name, height, mass, hairColor, skinColor, eyeColor, gender, films, img, homeworld, vehicles, starships) {
         this.name = name;
         this.height = Number(height) ? Number(height) : "unknown";
         this.mass = Number(mass) ? Number(mass) : "unknown";
@@ -26,9 +26,28 @@ class Character {
         this.gender = gender === "n/a" ? "no gender" : gender;
         this.films = films;
         this.img = img;
-        this.homeworld = homeworld
+        this.homeworld = homeworld;
+        this.transports = vehicles.concat(starships)
     }
 
+    async expensiveVehicles() {
+        loading(compareDiv);
+        let transports = this.transports;
+
+        if (transports.length < 1) {
+            compareDiv.innerHTML = `${this.name} has no vehicles`
+        } else if (transports.length === 1) {
+            let res = await getData(transports[0])
+            compareDiv.innerHTML = `${this.name} only has one vehicle. The name is <i>${res.name}</i> ${res.cost_in_credits === "unknown" ? "but" : "and"} the price is ${res.cost_in_credits}.`
+        } else {
+            let promises = transports.map(vehicle => getData(vehicle))
+            let result = await Promise.all(promises);
+
+            let filtered = result.filter(item => { return item.cost_in_credits !== "unknown" });
+            let sortedByPrice = filtered.sort((a, b) => { return Number(b.cost_in_credits) - Number(a.cost_in_credits) })
+            compareDiv.innerHTML = `${this.name} has ${this.transports.length} vehicles, the most expensive one is <i>${sortedByPrice[0].name}</i> with the price of ${sortedByPrice[0].cost_in_credits}.`
+        }
+    }
 
     compareHeight(character) {
         let p = document.createElement("p");
@@ -46,7 +65,7 @@ class Character {
     compareMass(character) {
         let p = document.createElement("p");
         if (!Number(this.mass) || !Number(character.mass)) {
-            p.innerHTML = "Someone is keeping their weight a secret!"
+            p.innerHTML = "Someone is keeping their weight a secret"
         } else if (this.mass === character.mass) {
             p.innerHTML = `They have the same weight`;
         } else {
@@ -93,6 +112,7 @@ class Character {
     }
 
     async firstFilm(character) {
+        console.log(this.films)
         loading(compareDiv);
         let data1 = await getData(this.films[0])
         let data2 = "";
@@ -115,7 +135,7 @@ class Character {
             let result = await Promise.all(promises);
             compareDiv.innerHTML = `<p>${this.name === character.name ? `${this.name} appear in:` : `Both characters appear in:`}</p>`;
             result.forEach(film => {
-                compareDiv.innerHTML += `<p>${film.title}</p>`
+                compareDiv.innerHTML += `<p>${film.title} - ${film.release_date.slice(0, 4)}</p>`
             })
         }
     }
@@ -190,9 +210,10 @@ async function getData(url) {
 async function createInstance(value) {
     let person = await getData(`https://swapi.dev/api/people/${value}`);
 
-    let { name, height, mass, hair_color, skin_color, eye_color, gender, films, homeworld } = person
+    let { name, height, mass, hair_color, skin_color, eye_color, gender, films, homeworld, vehicles, starships } = person
 
-    let newPerson = new Character(name, height, mass, hair_color, skin_color, eye_color, gender, films, value, homeworld)
+    let newPerson = new Character(name, height, mass, hair_color, skin_color, eye_color, gender, films, value, homeworld, vehicles, starships)
+    console.log(newPerson)
     return newPerson
 }
 
@@ -293,7 +314,7 @@ function displayData(character) {
 
 //add additional data
 function addData(character, section, characterTwo) {
-    let { name, height, mass, hair_color, skin_color, eye_color, gender, films, img } = character;
+    let { name, height, mass, hair_color, skin_color, eye_color, gender, films, img, transports } = character;
 
     section.innerHTML = `<img src="images/${img}.png" class="small img" alt=""><h2>${name}</h2><p>
     Height: ${height}<br>
@@ -303,6 +324,7 @@ function addData(character, section, characterTwo) {
     Eye color: ${eye_color}<br>
     Gender: ${gender}<br>
     Films: ${films.length}<br>
+    Transports: ${transports.length}<br>
     </p>`;
 
     let filmBtn = createBtn("First apperence")
@@ -314,7 +336,7 @@ function addData(character, section, characterTwo) {
     })
 
     vehiclesBtn.addEventListener("click", () => {
-        console.log("Här händer inget än, inga bilar")
+        character.expensiveVehicles()
     })
 
 

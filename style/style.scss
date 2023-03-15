@@ -19,11 +19,10 @@ body {
     width: 100%;
     order: 1;
     @media ($sm) {
-        width: 60%;
+        width: 100%;
     }
     @media ($md) {
         width: 50%;
-
     }
     @media ($xl) {
         flex-grow: 1;
@@ -73,7 +72,6 @@ body {
     padding: 1rem;
     align-items: center;
     display: inline-block;
-    // max-width: 800px;
 }
 
 .hidden {

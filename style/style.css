@@ -78,7 +78,7 @@ body {
 }
 @media (width >= 576px) {
   .textSection {
-    width: 60%;
+    width: 100%;
   }
 }
 @media (width >= 768px) {
