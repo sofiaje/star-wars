@@ -84,7 +84,7 @@ getDataBtn.addEventListener("click", async function (e) {
 
         let sectionTwo = document.createElement("section");
         sectionTwo.classList.add("textSection")
-        let compareBtn = createBtn("compare characters", "compareBtn")
+        let compareBtn = createBtn("Compare characters", "compareBtn")
 
         sectionTwo.append(compareBtn)
         charactersDiv.append(sectionTwo)
