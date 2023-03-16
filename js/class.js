@@ -33,7 +33,7 @@ class Character {
         } else if (this.mass === character.mass) {
             p.innerHTML = `They have the same weight`;
         } else {
-            p.innerHTML = `${this.name} ${this.mass > character.mass ? "is heavier" : "weighs less"} than ${character.name}`;
+            p.innerHTML = `${this.name} ${this.mass > character.mass ? "is heavier" : "weigh less"} than ${character.name}`;
         }
         compareDiv.append(p);
     }
@@ -90,7 +90,7 @@ class Character {
             compareDiv.innerHTML = `${this.name} has ${this.transports.length} vehicles, the most expensive one is <i>${sortedByPrice[0].name}</i> with the price of ${sortedByPrice[0].cost_in_credits}.`
         }
     }
-    
+
     async firstFilm(character) {
         loading(compareDiv);
         let data1 = await getData(this.films[0])
