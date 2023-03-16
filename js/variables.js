@@ -1,4 +1,5 @@
 //global
+
 let charactersDiv = document.getElementById("charactersDiv");
 let compareDiv = document.createElement("div");
 compareDiv.classList.add("compareDiv", "hidden")

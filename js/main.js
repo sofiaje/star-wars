@@ -42,13 +42,14 @@ async function getData(url) {
 
 //create new instance depending on user choice
 async function createInstance(value) {
+    //does instance alredy exist? return 
     let test = characters.filter(e => e.img === Number(value))
     if (test.length > 0) {
         return test[0]
     }
 
+    
     let person = await getData(`https://swapi.dev/api/people/${value}`);
-
     let { name, height, mass, hair_color, skin_color, eye_color, gender, films, homeworld, vehicles, starships } = person
 
     let newPerson = new Character(name, height, mass, hair_color, skin_color, eye_color, gender, films, value, homeworld, vehicles, starships)
@@ -74,7 +75,6 @@ getDataBtn.addEventListener("click", async function (e) {
         loading(pSpinner, "2xl")
 
 
-        // compareDiv.innerText = "";
         let firstCharacter = await createInstance(Number(list1.value));
         let secondCharacter = await createInstance(Number(list2.value));
         clear(pSpinner)
