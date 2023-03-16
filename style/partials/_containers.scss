@@ -33,7 +33,7 @@
 }
 
 #charactersDiv {
-    margin-top: 3rem;
+    margin-top: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -44,6 +44,8 @@
         flex-direction: row;
         justify-content: center;
         flex-wrap: wrap;
+        margin-top: 3rem;
+
     }
     @media ($xl) {
         gap: 2rem;
