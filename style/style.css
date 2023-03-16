@@ -164,14 +164,19 @@ button {
 }
 
 select {
-  background-color: #b4b09f;
+  background-color: #d1cebf;
   border: 0px;
   color: #0b0b09;
-  padding: 0.5rem 0.5rem 0.5rem 1.1rem;
   width: 120%;
+  padding: 0.2rem 0rem;
 }
 select:focus {
   outline: none;
+}
+@media (width >= 576px) {
+  select {
+    padding: 0.5rem 0.5rem 0.5rem 1.1rem;
+  }
 }
 
 .selectBtn {
@@ -179,7 +184,12 @@ select:focus {
   color: white;
   border: 1px solid #baa13d;
   border-radius: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 0.2rem;
+}
+@media (width >= 576px) {
+  .selectBtn {
+    padding: 0.5rem 1rem;
+  }
 }
 
 .align {
@@ -193,6 +203,7 @@ select:focus {
   overflow: hidden;
   border: 1px solid #535146;
   border-radius: 1rem;
+  background-color: #d1cebf;
 }
 
 * {

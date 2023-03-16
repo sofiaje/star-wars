@@ -1,11 +1,16 @@
 select {
-    background-color: #b4b09f;
+    background-color: #d1cebf;
     border: 0px;
     color: $bg-color;
-    padding: 0.5rem 0.5rem 0.5rem 1.1rem;
     width: 120%;
+    padding: 0.2rem 0rem;
+
     &:focus {
         outline: none;
+    }
+    @media ($sm){
+        padding: 0.5rem 0.5rem 0.5rem 1.1rem;
+
     }
 }
 
@@ -14,7 +19,11 @@ select {
     color: $p-white;
     border: 1px solid $btn-color;
     border-radius: 1rem;
-    padding: 0.5rem 1rem;
+    padding: 0.2rem 0.2rem;
+    @media ($sm){
+        padding: 0.5rem 1rem;
+
+    }
 }
 .align {
     display: flex;
@@ -26,4 +35,6 @@ select {
     overflow: hidden;
     border: 1px solid $small-btn;
     border-radius: 1rem;
+    background-color: #d1cebf;
+
 }

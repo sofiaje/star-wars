@@ -14,25 +14,6 @@ class Character {
         this.transports = vehicles.concat(starships)
     }
 
-    async expensiveVehicles() {
-        loading(compareDiv);
-        let transports = this.transports;
-
-        if (transports.length < 1) {
-            compareDiv.innerHTML = `${this.name} has no vehicles`
-        } else if (transports.length === 1) {
-            let res = await getData(transports[0])
-            compareDiv.innerHTML = `${this.name} only has one vehicle. The name is <i>${res.name}</i> ${res.cost_in_credits === "unknown" ? "but" : "and"} the price is ${res.cost_in_credits}.`
-        } else {
-            let promises = transports.map(vehicle => getData(vehicle))
-            let result = await Promise.all(promises);
-
-            let filtered = result.filter(item => { return item.cost_in_credits !== "unknown" });
-            let sortedByPrice = filtered.sort((a, b) => { return Number(b.cost_in_credits) - Number(a.cost_in_credits) })
-            compareDiv.innerHTML = `${this.name} has ${this.transports.length} vehicles, the most expensive one is <i>${sortedByPrice[0].name}</i> with the price of ${sortedByPrice[0].cost_in_credits}.`
-        }
-    }
-
     compareHeight(character) {
         let p = document.createElement("p");
 
@@ -91,6 +72,25 @@ class Character {
         compareDiv.append(p);
     }
 
+    async expensiveVehicles() {
+        loading(compareDiv);
+        let transports = this.transports;
+
+        if (transports.length < 1) {
+            compareDiv.innerHTML = `${this.name} has no vehicles`
+        } else if (transports.length === 1) {
+            let res = await getData(transports[0])
+            compareDiv.innerHTML = `${this.name} only has one vehicle. The name is <i>${res.name}</i> ${res.cost_in_credits === "unknown" ? "but" : "and"} the price is ${res.cost_in_credits}.`
+        } else {
+            let promises = transports.map(vehicle => getData(vehicle))
+            let result = await Promise.all(promises);
+
+            let filtered = result.filter(item => { return item.cost_in_credits !== "unknown" });
+            let sortedByPrice = filtered.sort((a, b) => { return Number(b.cost_in_credits) - Number(a.cost_in_credits) })
+            compareDiv.innerHTML = `${this.name} has ${this.transports.length} vehicles, the most expensive one is <i>${sortedByPrice[0].name}</i> with the price of ${sortedByPrice[0].cost_in_credits}.`
+        }
+    }
+    
     async firstFilm(character) {
         loading(compareDiv);
         let data1 = await getData(this.films[0])
