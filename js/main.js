@@ -170,6 +170,5 @@ function addData(character, section, characterTwo) {
         character.expensiveVehicles()
     })
 
-    //kolla min array
 }
 
