@@ -109,7 +109,7 @@ getDataBtn.addEventListener("click", async function (e) {
                 firstCharacter.compareFilms(secondCharacter);
                 firstCharacter.compareGender(secondCharacter);
                 firstCharacter.compareHairAndSkin(secondCharacter);
-                compareDiv.scrollIntoView()
+                compareDiv.scrollIntoView({behavior: "smooth"});
             }
 
             sectionTwo.insertBefore(buttonWrapper, compareDiv);
@@ -118,12 +118,12 @@ getDataBtn.addEventListener("click", async function (e) {
 
             planetBtn.addEventListener("click", () => {
                 firstCharacter.planets(secondCharacter)
-                compareDiv.scrollIntoView()
+                compareDiv.scrollIntoView({behavior: "smooth"});
             })
 
             commonFilmsBtn.addEventListener("click", () => {
                 firstCharacter.movies(secondCharacter);
-                compareDiv.scrollIntoView()
+                compareDiv.scrollIntoView({behavior: "smooth"});
             })
 
             buttonWrapper.append(commonFilmsBtn, planetBtn);
