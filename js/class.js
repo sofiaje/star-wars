@@ -74,6 +74,7 @@ class Character {
 
     async expensiveVehicles() {
         loading(compareDiv);
+        compareDiv.scrollIntoView();
         let transports = this.transports;
 
         if (transports.length < 1) {
@@ -93,6 +94,7 @@ class Character {
 
     async firstFilm(character) {
         loading(compareDiv);
+        compareDiv.scrollIntoView();
         let data1 = await getData(this.films[0])
         let data2 = "";
         if (this.name !== character.name) {
@@ -107,6 +109,7 @@ class Character {
 
     async movies(character) {
         loading(compareDiv);
+        compareDiv.scrollIntoView();
         let commonFilms = this.films.filter(url => character.films.includes(url))
         if (commonFilms.length < 1) {
             compareDiv.innerHTML = `The characters do not have any movies in common`
@@ -122,6 +125,7 @@ class Character {
 
     async planets(character) {
         loading(compareDiv);
+        compareDiv.scrollIntoView();
 
         let data1 = await getData(this.homeworld);
         let data2 = "";

@@ -91,6 +91,7 @@ getDataBtn.addEventListener("click", async function (e) {
 
         let sectionThree = displayData(secondCharacter);
 
+
         compareBtn.addEventListener("click", () => {
             sectionTwo.append(compareDiv)
             clear(compareDiv)
@@ -108,6 +109,7 @@ getDataBtn.addEventListener("click", async function (e) {
                 firstCharacter.compareFilms(secondCharacter);
                 firstCharacter.compareGender(secondCharacter);
                 firstCharacter.compareHairAndSkin(secondCharacter);
+                compareDiv.scrollIntoView()
             }
 
             sectionTwo.insertBefore(buttonWrapper, compareDiv);
@@ -116,10 +118,12 @@ getDataBtn.addEventListener("click", async function (e) {
 
             planetBtn.addEventListener("click", () => {
                 firstCharacter.planets(secondCharacter)
+                compareDiv.scrollIntoView()
             })
 
             commonFilmsBtn.addEventListener("click", () => {
                 firstCharacter.movies(secondCharacter);
+                compareDiv.scrollIntoView()
             })
 
             buttonWrapper.append(commonFilmsBtn, planetBtn);
@@ -138,7 +142,6 @@ function displayData(character) {
     let section = document.createElement("section");
     section.innerHTML = `<img src="images/${img}.png" class="small img" alt="picturs of ${name}"><h2>${name}</h2>`
     charactersDiv.append(section);
-
     return section;
 }
 
