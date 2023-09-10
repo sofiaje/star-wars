@@ -22,6 +22,6 @@ The application uses SWAPI to fetch data about Star Wars characters.
 - Sass
 - Flexbox
 
-##Preview
+## Preview
 
 <img width="661" alt="star-wars" src="https://github.com/sofiaje/star-wars/assets/113875885/e1a20b47-4e30-47d5-9729-c566832df34f">
